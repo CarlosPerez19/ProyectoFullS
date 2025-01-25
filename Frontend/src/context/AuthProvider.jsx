@@ -52,10 +52,10 @@ const AuthProvider = ({ children }) => {
 const actualizarPassword = async (datos) => {
     const token = localStorage.getItem('token')
     try {
-        const url = `${import.meta.env.VITE_BACKEND_URL}/veterinario/actualizarpassword`
+        const url = `${import.meta.env.VITE_BACKEND_URL}/cambiar-password`
         const options = {
             headers: {
-                method: 'PUT',
+                method: 'PATCH',
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${token}`
             }

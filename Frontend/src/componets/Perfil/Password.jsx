@@ -10,8 +10,9 @@ const Password = () => {
     const {actualizarPassword} = useContext(AuthContext)
     const [mensaje, setMensaje] = useState({})
     const [form, setForm] = useState({
-        passwordactual:"",
-        passwordnuevo:""
+        password:"",
+        newpassword:"",
+        confirmpassword:""
     })
 
     const handleChange = (e) => {
@@ -32,9 +33,9 @@ const Password = () => {
             return
         }
 
-        if (form.passwordnuevo.length < 6)
+        if (form.passwordnuevo.length < 8)
         {
-            setMensaje({ respuesta: "El password debe tener mínimo 6 carácteres", tipo: false })
+            setMensaje({ respuesta: "El password debe tener mínimo 8 carácteres", tipo: false })
                 setTimeout(() => {
                     setMensaje({})
                 }, 3000);
@@ -63,30 +64,45 @@ const Password = () => {
 
             <div>
                 <label
-                    htmlFor='passwordactual'
+                    htmlFor='password'
                     className='text-gray-700 uppercase font-bold text-sm'>Password actual: </label>
                 <input
-                    id='passwordactual'
+                    id='password'
                     type="password"
                     className='border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5'
                     placeholder='**************'
-                    name='passwordactual'
-                    value={form.passwordactual}
+                    name='password'
+                    value={form.password}
                     onChange={handleChange}
                 />
             </div>
 
             <div>
                 <label
-                    htmlFor='passwordnuevo'
+                    htmlFor='newpassword'
                     className='text-gray-700 uppercase font-bold text-sm'>Nuevo password: </label>
                 <input
-                    id='passwordnuevo'
+                    id='newpassword'
                     type="password"
                     className='border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5'
                     placeholder='**************'
-                    name='passwordnuevo'
-                    value={form.passwordnuevo}
+                    name='newpassword'
+                    value={form.newpassword}
+                    onChange={handleChange}
+                />
+            </div>
+
+            <div>
+                <label
+                    htmlFor='confirmpassword'
+                    className='text-gray-700 uppercase font-bold text-sm'>Confirmar password: </label>
+                <input
+                    id='confirmpassword'
+                    type="password"
+                    className='border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5'
+                    placeholder='**************'
+                    name='confirmpassword'
+                    value={form.confirmpassword}
                     onChange={handleChange}
                 />
             </div>
