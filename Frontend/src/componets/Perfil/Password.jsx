@@ -29,16 +29,16 @@ const Password = () => {
             setMensaje({ respuesta: "Todos los campos deben ser ingresados", tipo: false })
                 setTimeout(() => {
                     setMensaje({})
-                }, 3000);
+                }, 5000);
             return
         }
 
-        if (form.passwordnuevo.length < 8)
+        if (form.newpassword.length < 8)
         {
             setMensaje({ respuesta: "El password debe tener mínimo 8 carácteres", tipo: false })
                 setTimeout(() => {
                     setMensaje({})
-                }, 3000);
+                }, 5000);
             return
         }
 
@@ -46,7 +46,7 @@ const Password = () => {
         setMensaje(resultado)
         setTimeout(() => {
             setMensaje({})
-        }, 3000);
+        }, 5000);
         
 }
 

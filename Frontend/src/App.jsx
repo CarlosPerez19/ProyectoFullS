@@ -19,8 +19,14 @@ import { PrivateRoute } from './routes/PrivateRoute'
 import { TratamientosProvider } from './context/TratamientosProvider'
 import PrivateRouteWithRole from './routes/PrivateRouteWithRole'
 import Registrar from './paginas/Registrar'
-
-
+import Profesores from './paginas/Profesores'
+import Representante from './paginas/Representante'
+import Materias from './paginas/Materias'
+import Estudiante from './paginas/Estudiante'
+import Asignar from './paginas/Asignar'
+import RegistrarAsistencia from './paginas/RegistrarAsistencia'
+import JustificarInasistencia from './paginas/JustificarInasistencia'
+import RegistrarCurso from './paginas/RegistrarCurso'
 
 function App() {
   return (
@@ -56,6 +62,46 @@ function App() {
               <Route path='registrar' element={
                 <PrivateRouteWithRole>
                   <Registrar />
+              </PrivateRouteWithRole>}/>
+
+              <Route path='registrar-profesor' element={
+                <PrivateRouteWithRole>
+                  <Profesores />
+              </PrivateRouteWithRole>}/>
+
+              <Route path='registrar-representante' element={
+                <PrivateRouteWithRole>
+                  <Representante />
+              </PrivateRouteWithRole>}/>
+
+              <Route path='registrar-materia' element={
+                <PrivateRouteWithRole>
+                  <Materias />
+              </PrivateRouteWithRole>}/>
+
+              <Route path='registrar-estudiante' element={
+                <PrivateRouteWithRole>
+                  <Estudiante />
+              </PrivateRouteWithRole>}/>
+
+              <Route path='asignar-representante' element={
+                <PrivateRouteWithRole>
+                  <Asignar />
+              </PrivateRouteWithRole>}/>
+
+              <Route path='registro-asistencia' element={
+                <PrivateRouteWithRole>
+                  <RegistrarAsistencia />
+              </PrivateRouteWithRole>}/>
+
+              <Route path='justificar-inasistencia' element={
+                <PrivateRouteWithRole>
+                  <JustificarInasistencia />
+              </PrivateRouteWithRole>}/>
+
+              <Route path='registrar-curso' element={
+                <PrivateRouteWithRole>
+                  <RegistrarCurso />
               </PrivateRouteWithRole>}/>
 
               <Route path='actualizar/:id' element={<Actualizar />} />
