@@ -2,7 +2,7 @@ import { useState } from 'react'
 import axios from 'axios';
 import Mensaje from '../componets/Alertas/Mensajes'
 
-export const RegisterCursos = () => {
+export const RegisterAsistencias = () => {
 
 
     // paso 1 
