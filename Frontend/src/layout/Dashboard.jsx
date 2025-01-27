@@ -29,13 +29,6 @@ const Dashboard = () => {
                         <Link to='/dashboard' className={`${urlActual === '/dashboard' ? 'text-slate-200 bg-gray-900 px-3 py-2 rounded-md text-center' : 'text-slate-600'} text-xl block mt-2 hover:text-slate-600`}>Perfil</Link>
                     </li>
 
-                    <li className="text-center">
-                        <Link to='/dashboard/listar' className={`${urlActual === '/dashboard/listar' ? 'text-slate-200 bg-gray-900 px-3 py-2 rounded-md text-center' : 'text-slate-600'} text-xl block mt-2 hover:text-slate-600`}>Listar</Link>
-                    </li>
-
-                    <li className="text-center">
-                        <Link to='/dashboard/crear' className={`${urlActual === '/dashboard/crear' ? 'text-slate-100 bg-gray-900 px-3 py-2 rounded-md text-center' : 'text-slate-600'} text-xl block mt-2 hover:text-slate-600`}>Crear</Link>
-                    </li>
 
                     <li className="text-center">
                         <Link to='/dashboard/registrar' className={`${urlActual === '/dashboard/registrar' ? 'text-slate-100 bg-gray-900 px-3 py-2 rounded-md text-center' : 'text-slate-600'} text-xl block mt-2 hover:text-slate-600`}>Registrar Administrador</Link>
@@ -65,8 +58,9 @@ const Dashboard = () => {
                         <Link to='/dashboard/asignar-representante' className={`${urlActual === '/dashboard/asignar-representante' ? 'text-slate-100 bg-gray-900 px-3 py-2 rounded-md text-center' : 'text-slate-600'} text-xl block mt-2 hover:text-slate-600`}>Asignacion</Link>
                     </li>
 
+                    
                     <li className="text-center">
-                        <Link to='/dashboard/registro-asistencia' className={`${urlActual === '/dashboard/registrar-asistencia' ? 'text-slate-100 bg-gray-900 px-3 py-2 rounded-md text-center' : 'text-slate-600'} text-xl block mt-2 hover:text-slate-600`}>Asistencias</Link>
+                        <Link to='/dashboard/registro-asistencia' className={`${urlActual === '/dashboard/registro-asistencia' ? 'text-slate-100 bg-gray-900 px-3 py-2 rounded-md text-center' : 'text-slate-600'} text-xl block mt-2 hover:text-slate-600`}>Asistencias</Link>
                     </li>
 
                     <li className="text-center">
