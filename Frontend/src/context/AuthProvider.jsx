@@ -60,10 +60,11 @@ const actualizarPassword = async (datos) => {
                 Authorization: `Bearer ${token}`
             }
         }
-        const respuesta = await axios.put(url, datos, options)
-        return { respuesta: respuesta.data.msg, tipo: true }
+        const respuesta = await axios.patch(url, datos, options)
+        console.log(respuesta)
+        return { respuesta: respuesta.data.mensaje, tipo: true }
     } catch (error) {
-        return { respuesta: error.response.data.msg, tipo: false }
+        return { respuesta: error.response.data.error, tipo: false }
     }
 }
     
