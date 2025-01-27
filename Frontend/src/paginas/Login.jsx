@@ -26,13 +26,9 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-        const url = form.password.includes("vet")
-            ? `${import.meta.env.VITE_BACKEND_URL}/paciente/login`
-            : `${import.meta.env.VITE_BACKEND_URL}/login`
-
         try {
 
-        
+            const url = `${import.meta.env.VITE_BACKEND_URL}/login`
             const respuesta = await axios.post(url, form)
             localStorage.setItem('token', respuesta.data.token)
             setAuth(respuesta.data)
@@ -53,7 +49,7 @@ const Login = () => {
             bg-no-repeat bg-cover bg-center sm:block hidden
             ">
             </div>
-
+            {Object.keys(mensaje).length>0 && <Mensaje tipo={mensaje.tipo}>{mensaje.respuesta}</Mensaje>}
             <div className="w-1/2 h-screen bg-white flex justify-center items-center">
 
                 <div className="md:w-4/5 sm:w-full">

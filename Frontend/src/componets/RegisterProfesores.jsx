@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import axios from 'axios';
 import Mensaje from './Alertas/Mensajes'
 
@@ -9,7 +9,6 @@ export const RegisterProfesores = () => {
         nombre: "",
         apellido: "",
         email: "",
-        password: "",
         telefono: "",
         direccion: "",
         cedula: ""
@@ -26,19 +25,25 @@ export const RegisterProfesores = () => {
 
     const [mensaje, setMensaje] = useState({})
 
+        
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log(form); // Log the form data to see if it's correctly populated
         try {
-          const url =  `${import.meta.env.VITE_BACKEND_URL}/registro-profesor`;
-          const respuesta = await axios.post(url, form);
-          setMensaje({ respuesta: respuesta.data.msg, tipo: true });
-          setform({});
-        } catch (error) {
-          console.log(error.response); // Log the entire error response for debugging
-          setMensaje({ respuesta: error.response.data.msg, tipo: false });
-        }
-      };
+            const url =  `${import.meta.env.VITE_BACKEND_URL}/registro-profesor`;
+            const token = localStorage.getItem('token'); // Obtén el token de localStorage
+            const respuesta = await axios.post(url, form, {
+              headers: {
+                'Authorization': `Bearer ${token}` // Incluye el token en los encabezados
+              }
+            });
+            console.log(respuesta.data); // Log the response data
+            setMensaje({ respuesta: respuesta.data.msg, tipo: true }); // Actualiza el mensaje en caso de éxito
+          } catch (error) {
+            console.error(error);
+            setMensaje({ respuesta: error.response.data.error, tipo: false }); // Actualiza el mensaje en caso de error
+          }
+    };
 
 
       return (
@@ -93,12 +98,6 @@ export const RegisterProfesores = () => {
                                 placeholder="Ingresa tu cedula" className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5" required />
                         </div>
 
-                        <div>
-                            <label className="text-gray-700 uppercase font-bold text-sm" htmlFor="password">Contraseña:</label>
-                            <input type="password" id="password" name='password'
-                                value={form.password || ""} onChange={handleChange}
-                                placeholder="********************" className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5" required />
-                        </div>
 
                         <div>
                             <button className=" bg-gray-600 w-full p-3 text-slate-300 uppercase font-bold rounded-lg hover:bg-gray-900 cursor-pointer transition-al mt-4">Registrar</button>

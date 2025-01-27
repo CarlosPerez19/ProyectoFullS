@@ -9,6 +9,8 @@ export const RegisterEstudiantes = () => {
     const [form, setform] = useState({
         nombre: "",
         apellido: "",
+        curso:"",
+        cedulaRepresentante: "",
         cedula: ""
     })
     
@@ -27,14 +29,19 @@ export const RegisterEstudiantes = () => {
         e.preventDefault();
         console.log(form); // Log the form data to see if it's correctly populated
         try {
-          const url =  `${import.meta.env.VITE_BACKEND_URL}/registro-estudiante`;
-          const respuesta = await axios.post(url, form);
-          setMensaje({ respuesta: respuesta.data.msg, tipo: true });
-          setform({});
-        } catch (error) {
-          console.log(error.response); // Log the entire error response for debugging
-          setMensaje({ respuesta: error.response.data.msg, tipo: false });
-        }
+            const url =  `${import.meta.env.VITE_BACKEND_URL}/registro-estudiante`;
+            const token = localStorage.getItem('token'); // Obtén el token de localStorage
+            const respuesta = await axios.post(url, form, {
+              headers: {
+                'Authorization': `Bearer ${token}` // Incluye el token en los encabezados
+              }
+            });
+            setMensaje({ respuesta: respuesta.data.msg, tipo: true });
+            setform({});
+          } catch (error) {
+            console.log(error.response); // Log the entire error response for debugging
+            setMensaje({ respuesta: error.response.data.error, tipo: false });
+          }
       };
 
 
@@ -61,26 +68,27 @@ export const RegisterEstudiantes = () => {
                         </div>
 
                         <div >
-                            <label className="text-gray-700 uppercase font-bold text-sm" htmlFor="apellido">Cedula:</label>
-                            <input type="text" id="cedula" name='cedula'
-                                value={form.cedula || ""} onChange={handleChange}
-                                placeholder="Ingrese la cedula" className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5" required />
+                            <label className="text-gray-700 uppercase font-bold text-sm" htmlFor="apellido">Curso:</label>
+                            <input type="text" id="curso" name='curso'
+                                value={form.curso || ""} onChange={handleChange}
+                                placeholder="Ingresa el curso del estudiante" className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5" required />
                         </div>
 
-                        <div>
-                            <label
-                                htmlFor='observaciones:'
-                                className='text-gray-700 uppercase font-bold text-sm'>Observaciones: </label>
-                            <textarea
-                                id='observaciones'
-                                type="text"
-                                className='border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5'
-                                placeholder='Ingrese las observaciones'
-                                name='observaciones'
-                                value={form.observaciones}
-                                onChange={handleChange}
-                            />
+                        <div >
+                            <label className="text-gray-700 uppercase font-bold text-sm" htmlFor="apellido">Cedula Representante:</label>
+                            <input type="text" id="cedulaRepresentante" name='cedulaRepresentante'
+                                value={form.cedulaRepresentante || ""} onChange={handleChange}
+                                placeholder="Ingresa la cedula del representante" className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5" required />
                         </div>
+
+                        <div >
+                            <label className="text-gray-700 uppercase font-bold text-sm" htmlFor="apellido">Cedula Estudiante:</label>
+                            <input type="text" id="cedula" name='cedula'
+                                value={form.cedula || ""} onChange={handleChange}
+                                placeholder="Ingrese la cedula del estudiante" className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5" required />
+                        </div>
+
+                        
 
 
                         <div>

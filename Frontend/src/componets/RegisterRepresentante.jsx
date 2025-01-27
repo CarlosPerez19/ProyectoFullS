@@ -11,8 +11,7 @@ export const RegisterRepresentante = () => {
         apellido: "",
         email: "",
         telefono:"",
-        cedula:"",
-        password: ""
+        cedula:""
     })
     
     // paso 2
@@ -30,14 +29,19 @@ export const RegisterRepresentante = () => {
         e.preventDefault();
         console.log(form); // Log the form data to see if it's correctly populated
         try {
-          const url =  `${import.meta.env.VITE_BACKEND_URL}/registro-representante`;
-          const respuesta = await axios.post(url, form);
-          setMensaje({ respuesta: respuesta.data.msg, tipo: true });
-          setform({});
-        } catch (error) {
-          console.log(error.response); // Log the entire error response for debugging
-          setMensaje({ respuesta: error.response.data.msg, tipo: false });
-        }
+            const url =  `${import.meta.env.VITE_BACKEND_URL}/registro-representante`;
+            const token = localStorage.getItem('token'); // Obtén el token de localStorage
+            const respuesta = await axios.post(url, form, {
+              headers: {
+                'Authorization': `Bearer ${token}` // Incluye el token en los encabezados
+              }
+            });
+            setMensaje({ respuesta: respuesta.data.msg, tipo: true });
+            setform({});
+          } catch (error) {
+            console.log(error.response); // Log the entire error response for debugging
+            setMensaje({ respuesta: error.response.data.error, tipo: false });
+          }
       };
 
 
@@ -83,13 +87,6 @@ export const RegisterRepresentante = () => {
                             <input type="text" id="cedula" name='cedula'
                                 value={form.cedula || ""} onChange={handleChange}
                                 placeholder="Ingresa tu cedula" className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5" required />
-                        </div>
-
-                        <div>
-                            <label className="text-gray-700 uppercase font-bold text-sm" htmlFor="password">Contraseña:</label>
-                            <input type="password" id="password" name='password'
-                                value={form.password || ""} onChange={handleChange}
-                                placeholder="********************" className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5" required />
                         </div>
 
                         <div>

@@ -9,8 +9,7 @@ export const Register = () => {
     const [form, setform] = useState({
         nombre: "",
         apellido: "",
-        email: "",
-        password: ""
+        email: ""
     })
     
     // paso 2
@@ -66,13 +65,6 @@ export const Register = () => {
                             <input type="email" id="email" name='email'
                                 value={form.email || ""} onChange={handleChange}
                                 placeholder="Ingresa tu email" className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5" required />
-                        </div>
-
-                        <div>
-                            <label className="text-gray-700 uppercase font-bold text-sm" htmlFor="password">Contraseña:</label>
-                            <input type="password" id="password" name='password'
-                                value={form.password || ""} onChange={handleChange}
-                                placeholder="********************" className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5" required />
                         </div>
 
                         <div>
