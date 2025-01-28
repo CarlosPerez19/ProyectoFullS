@@ -32,7 +32,11 @@ const Login = () => {
             const respuesta = await axios.post(url, form)
             localStorage.setItem('token', respuesta.data.token)
             setAuth(respuesta.data)
-            navigate('/dashboard')
+            if (respuesta.mensaje.includes('profesor')) {
+                navigate('/profesor-dashboard');
+            } else {
+                navigate('/dashboard');
+            }
         } catch (error) {
             toast.error(error.response.data.msg)
             setform({})

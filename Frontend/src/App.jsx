@@ -27,6 +27,7 @@ import Asignar from './paginas/Asignar'
 import RegistrarAsistencia from './paginas/RegistrarAsistencia'
 import JustificarInasistencia from './paginas/JustificarInasistencia'
 import RegistrarCurso from './paginas/RegistrarCurso'
+import ProfesoresDashboard from './layout/ProfesoresDashboard'
 
 function App() {
   return (
@@ -110,6 +111,15 @@ function App() {
         </PrivateRoute>
         } />
 
+        <Route path='profesor-dashboard/*' element={
+          <PrivateRoute>
+            <Routes>
+              <Route element={<ProfesoresDashboard />}>
+                <Route index element={<Perfil />} />
+              </Route>
+            </Routes>
+          </PrivateRoute>
+        } />
 
         </Routes>
       </TratamientosProvider>
