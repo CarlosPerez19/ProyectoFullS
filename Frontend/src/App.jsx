@@ -7,7 +7,7 @@ import { Register } from './paginas/Register'
 import { Forgot } from './paginas/Forgot'
 import { NotFound } from './paginas/NotFound'
 import Dashboard from './layout/Dashboard'
-import Listar from './paginas/Listar'
+import Listar from './paginas/Administrador/Listar'
 import Visualizar from './paginas/Visualizar'
 import Crear from './paginas/Crear'
 import Actualizar from './paginas/Actualizar'
@@ -26,8 +26,9 @@ import Estudiante from './paginas/Estudiante'
 import Asignar from './paginas/Asignar'
 import RegistrarAsistencia from './paginas/RegistrarAsistencia'
 import JustificarInasistencia from './paginas/JustificarInasistencia'
-import RegistrarCurso from './paginas/RegistrarCurso'
+import RegistrarCurso from './paginas/Administrador/RegistrarCurso'
 import ProfesoresDashboard from './layout/ProfesoresDashboard'
+
 
 function App() {
   return (
@@ -115,7 +116,10 @@ function App() {
           <PrivateRoute>
             <Routes>
               <Route element={<ProfesoresDashboard />}>
-                <Route index element={<Perfil />} />
+              <Route index element={<Perfil />} />
+              <Route path='listar' element={<Listar />} />
+              <Route path='visualizar/:id' element={<Visualizar />} />
+                
               </Route>
             </Routes>
           </PrivateRoute>

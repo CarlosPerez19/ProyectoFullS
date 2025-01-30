@@ -1,6 +1,6 @@
 import React from 'react'
-import { Register } from '../componets/Register'
-import { RegisterCursos } from '../componets/RegisterCursos'
+import { Register } from '../../componets/Register'
+import { RegisterCursos } from '../../componets/RegisterCursos'
 
 const RegistrarCurso = () => {
     return (

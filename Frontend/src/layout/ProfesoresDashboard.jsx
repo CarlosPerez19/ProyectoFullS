@@ -26,7 +26,7 @@ const ProfesoresDashboard = () => {
                 <ul className="mt-5">
 
                     <li className="text-center">
-                        <Link to='/dashboard' className={`${urlActual === '/dashboard' ? 'text-slate-200 bg-gray-900 px-3 py-2 rounded-md text-center' : 'text-slate-600'} text-xl block mt-2 hover:text-slate-600`}>Perfil</Link>
+                        <Link to='/profesor-dashboard' className={`${urlActual === '/profesor-dashboard' ? 'text-slate-200 bg-gray-900 px-3 py-2 rounded-md text-center' : 'text-slate-600'} text-xl block mt-2 hover:text-slate-600`}>Perfil</Link>
                     </li>
 
                 </ul>

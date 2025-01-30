@@ -1,5 +1,5 @@
 import React from 'react'
-import Tabla from '../componets/Tabla'
+import Tabla from '../../componets/Tabla'
 
 const Listar = () => {
     return (
