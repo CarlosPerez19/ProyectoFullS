@@ -1,5 +1,4 @@
 import React from 'react'
-import { Register } from '../componets/Register'
 import { RegisterAsistencias } from '../componets/RegisterAsistencias'
 
 const RegistrarAsistencia = () => {

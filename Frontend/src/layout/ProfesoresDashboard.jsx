@@ -29,6 +29,21 @@ const ProfesoresDashboard = () => {
                         <Link to='/profesor-dashboard' className={`${urlActual === '/profesor-dashboard' ? 'text-slate-200 bg-gray-900 px-3 py-2 rounded-md text-center' : 'text-slate-600'} text-xl block mt-2 hover:text-slate-600`}>Perfil</Link>
                     </li>
 
+                    <li className="text-center">
+                        <Link to='/profesor-dashboard/registrar-nota' className={`${urlActual === '/profesor-dashboard/registrar-nota' ? 'text-slate-100 bg-gray-900 px-3 py-2 rounded-md text-center' : 'text-slate-600'} text-xl block mt-2 hover:text-slate-600`}>Registrar Notas</Link>
+                    </li>
+
+                    
+                    <li className="text-center">
+                        <Link to='/profesor-dashboard/actualizar-nota' className={`${urlActual === '/profesor-dashboard/actualizar-nota' ? 'text-slate-100 bg-gray-900 px-3 py-2 rounded-md text-center' : 'text-slate-600'} text-xl block mt-2 hover:text-slate-600`}>Actualizar Notas</Link>
+                    </li>
+
+                    
+                    <li className="text-center">
+                        <Link to='/profesor-dashboard/observacion-estudiante' className={`${urlActual === '/profesor-dashboard/observacion-estudiante' ? 'text-slate-100 bg-gray-900 px-3 py-2 rounded-md text-center' : 'text-slate-600'} text-xl block mt-2 hover:text-slate-600`}>Observaciones</Link>
+                    </li>
+
+                
                 </ul>
 
             </div>

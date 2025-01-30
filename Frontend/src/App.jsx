@@ -28,6 +28,9 @@ import RegistrarAsistencia from './paginas/RegistrarAsistencia'
 import JustificarInasistencia from './paginas/JustificarInasistencia'
 import RegistrarCurso from './paginas/Administrador/RegistrarCurso'
 import ProfesoresDashboard from './layout/ProfesoresDashboard'
+import RegisterNotas from './paginas/Profesor/RegisterNotas'
+import ActualizarNotas from './paginas/Profesor/ActualizarNotas'
+import ObservacionesEstudiantes from './paginas/Profesor/ObservacionesEstudiantes'
 
 
 function App() {
@@ -116,10 +119,25 @@ function App() {
           <PrivateRoute>
             <Routes>
               <Route element={<ProfesoresDashboard />}>
-              <Route index element={<Perfil />} />
-              <Route path='listar' element={<Listar />} />
-              <Route path='visualizar/:id' element={<Visualizar />} />
+                <Route index element={<Perfil />} />
+                <Route path='listar' element={<Listar />} />
+                <Route path='visualizar/:id' element={<Visualizar />} />
                 
+                <Route path='registrar-nota' element={
+                  <PrivateRouteWithRole>
+                    <RegisterNotas />
+                </PrivateRouteWithRole>}/>
+
+                <Route path='actualizar-nota' element={
+                  <PrivateRouteWithRole>
+                    <ActualizarNotas />
+                </PrivateRouteWithRole>}/>
+
+                <Route path='observacion-estudiante' element={
+                  <PrivateRouteWithRole>
+                    <ObservacionesEstudiantes />
+                </PrivateRouteWithRole>}/>
+              
               </Route>
             </Routes>
           </PrivateRoute>
