@@ -7,9 +7,8 @@ export const ObservacionEstudiante = () => {
 
     // paso 1 
     const [form, setform] = useState({
-        curso: '',
-        nombre: '',
-        cedulaProfesor: ''
+        cedula: '',
+        observacion: ''
     })
     
     // paso 2
@@ -27,7 +26,7 @@ export const ObservacionEstudiante = () => {
         e.preventDefault();
         console.log(form); // Log the form data to see if it's correctly populated
         try {
-            const url =  `${import.meta.env.VITE_BACKEND_URL}/registro-materia`;
+            const url =  `${import.meta.env.VITE_BACKEND_URL}/observacion-estudiante`;
             const token = localStorage.getItem('token'); // Obtén el token de localStorage
             const respuesta = await axios.post(url, form, {
               headers: {
@@ -52,24 +51,25 @@ export const ObservacionEstudiante = () => {
               
                     <form onSubmit={handleSubmit}>
 
-                    <div>
-                            <label className="text-gray-700 uppercase font-bold text-sm" htmlFor="nombre">Curso:</label>
-                            <input type="text" id="curso" name='curso'
-                                value={form.curso || ""} onChange={handleChange}
-                                placeholder="Ingresa el curso" className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5" required />
-                        </div>
-                        <div>
-                            <label className="text-gray-700 uppercase font-bold text-sm" htmlFor="nombre">Nombre:</label>
-                            <input type="text" id="nombre" name='nombre'
-                                value={form.nombre || ""} onChange={handleChange}
-                                placeholder="Ingresa el nombre de la materia" className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5" required />
-                        </div>
 
                         <div >
-                            <label className="text-gray-700 uppercase font-bold text-sm" htmlFor="apellido">Cedula Profesor:</label>
-                            <input type="text" id="cedulaProfesor" name='cedulaProfesor'
-                                value={form.cedulaProfesor || ""} onChange={handleChange}
-                                placeholder="Ingresa cedula del profesor asignado a la materia" className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5" required />
+                            <label className="text-gray-700 uppercase font-bold text-sm" htmlFor="apellido">Cedula:</label>
+                            <input type="text" id="cedulaProfesor" name='cedula'
+                                value={form.cedula || ""} onChange={handleChange}
+                                placeholder="Ingresa cedula del estudiante" className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5" required />
+                        </div>
+
+                        <div>
+                            <label htmlFor="observacion" className="text-gray-700 uppercase font-bold text-sm">Observacion: </label>
+                            <textarea
+                                id="observacion"
+                                name="observacion"
+                                value={form.observacion || ""}
+                                onChange={handleChange}
+                                placeholder="Ingrese la observacion"
+                                className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5"
+                                required
+                            />
                         </div>
 
                         <div>

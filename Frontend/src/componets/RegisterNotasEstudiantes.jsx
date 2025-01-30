@@ -9,30 +9,51 @@ export const RegisterNotasEstudiantes = () => {
         cedula: '',
         nota: '',
         motivo: '',
-        materia: '' // Cambiado a singular para seleccionar una sola materia
+        materia: ''
     });
+    const [cursos, setCursos] = useState([]); // Inicializar como array vacío
     const [materias, setMaterias] = useState([]);
+    const [cursoSeleccionado, setCursoSeleccionado] = useState('');
     const [mensaje, setMensaje] = useState({});
 
     useEffect(() => {
-        // Fetch materias asociadas al profesor desde el backend
-        const fetchMaterias = async () => {
+        // Fetch cursos asociados al profesor desde el backend
+        const fetchCursos = async () => {
             try {
-                const url = `${import.meta.env.VITE_BACKEND_URL}/profesor/materias`;
+                const url = `${import.meta.env.VITE_BACKEND_URL}/profesor/cursos`;
                 const token = localStorage.getItem('token'); // Obtén el token de localStorage
                 const respuesta = await axios.get(url, {
                     headers: {
                         'Authorization': `Bearer ${token}` // Incluye el token en los encabezados
                     }
                 });
-                setMaterias(respuesta.data.cursosAsignados);
-                console.log(respuesta.data.cursosAsignados);
+                setCursos(respuesta.data.cursosAsociados || []); // Asegurarse de que sea un array
             } catch (error) {
                 console.error(error);
             }
         };
-        fetchMaterias();
-    }, []);
+        fetchCursos();
+    }, [auth.id]);
+
+    const handleCursoChange = async (e) => {
+        const cursoId = e.target.value;
+        setCursoSeleccionado(cursoId);
+        setform({ ...form, materia: '' }); // Reset materia when a new course is selected
+        try {
+            const url = `${import.meta.env.VITE_BACKEND_URL}/profesor/${cursoId}/materias`;
+            const token = localStorage.getItem('token'); // Obtén el token de localStorage
+            const respuesta = await axios.get(url, {
+                headers: {
+                    'Authorization': `Bearer ${token}` // Incluye el token en los encabezados
+                }
+            });
+            console.log(respuesta.data);
+            const materiasDetalle = respuesta.data.materiasAsignadas.flatMap(asignacion => asignacion.materiasDetalle) || [];
+            setMaterias(materiasDetalle); // Asegurarse de que sea un array
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -55,6 +76,8 @@ export const RegisterNotasEstudiantes = () => {
             });
             setMensaje({ respuesta: respuesta.data.msg, tipo: true });
             setform({ cedula: '', nota: '', motivo: '', materia: '' });
+            setCursoSeleccionado('');
+            setMaterias([]);
         } catch (error) {
             console.log(error); // Log the entire error response for debugging
             setMensaje({ respuesta: error.response.data.error, tipo: false });
@@ -83,21 +106,40 @@ export const RegisterNotasEstudiantes = () => {
                         </div>
 
                         <div>
-                            <label className="text-gray-700 uppercase font-bold text-sm" htmlFor="materia">Seleccionar Materia:</label>
+                            <label className="text-gray-700 uppercase font-bold text-sm" htmlFor="curso">Seleccionar Curso:</label>
                             <select
-                                id="materia"
-                                name="materia"
-                                value={form.materia}
-                                onChange={handleChange}
+                                id="curso"
+                                name="curso"
+                                value={cursoSeleccionado}
+                                onChange={handleCursoChange}
                                 className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5"
                                 required
                             >
-                                <option value="">Seleccione una materia</option>
-                                {materias.map(materia => (
-                                    <option key={materia._id} value={materia._id}>{materia.nombre}</option>
+                                <option value="">Seleccione un curso</option>
+                                {Array.isArray(cursos) && cursos.map(curso => (
+                                    <option key={curso._id} value={curso._id}>{curso.nombre}</option>
                                 ))}
                             </select>
                         </div>
+
+                        {cursoSeleccionado && (
+                            <div>
+                                <label className="text-gray-700 uppercase font-bold text-sm" htmlFor="materia">Seleccionar Materia:</label>
+                                <select
+                                    id="materia"
+                                    name="materia"
+                                    value={form.materia}
+                                    onChange={handleChange}
+                                    className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5"
+                                    required
+                                >
+                                    <option value="">Seleccione una materia</option>
+                                    {Array.isArray(materias) && materias.map(materia => (
+                                        <option key={materia._id} value={materia._id}>{materia.nombre}</option>
+                                    ))}
+                                </select>
+                            </div>
+                        )}
 
                         <div>
                             <label htmlFor="motivo" className="text-gray-700 uppercase font-bold text-sm">Motivo: </label>

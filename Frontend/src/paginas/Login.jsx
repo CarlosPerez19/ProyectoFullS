@@ -53,7 +53,7 @@ const Login = () => {
     return (
         <>
             <ToastContainer/>
-            <div className="w-1/2 h-screen bg-[url('/public/images/doglogin.jpg')] 
+            <div className="w-1/2 h-screen bg-[url('/public/images/descubrir.jpg')] 
             bg-no-repeat bg-cover bg-center sm:block hidden
             ">
             </div>
@@ -61,9 +61,12 @@ const Login = () => {
             <div className="w-1/2 h-screen bg-white flex justify-center items-center">
 
                 <div className="md:w-4/5 sm:w-full">
-
-                    <h1 className="text-3xl font-semibold mb-2 text-center uppercase  text-gray-500">Welcome back</h1>
-                    <small className="text-gray-400 block my-4 text-sm">Welcome back! Please enter your details</small>
+                
+                    <div className="flex justify-center mb-6">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR58EY_JijUgAGct2dUABbc0FRLLsEa9FaQDQ&s" alt="Logo" className="h-60 w-60 rounded-full object-cover" />
+                    </div>
+                    
+                    <small className="text-gray-400 block my-4 text-sm">¡Bienvenido! Ingresa tus datos para iniciar</small>
 
 
                     <form onSubmit={handleSubmit}>

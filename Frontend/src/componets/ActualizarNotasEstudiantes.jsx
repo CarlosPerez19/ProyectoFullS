@@ -1,88 +1,181 @@
-import { useState } from 'react'
+import { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
-import Mensaje from '../componets/Alertas/Mensajes'
+import Mensaje from '../componets/Alertas/Mensajes';
+import AuthContext from '../context/AuthProvider';
 
 export const ActualizarNotasEstudiantes = () => {
-
-
-    // paso 1 
+    const { auth } = useContext(AuthContext); // Obtener el contexto de autenticación
     const [form, setform] = useState({
-        curso: '',
-        nombre: '',
-        cedulaProfesor: ''
-    })
-    
-    // paso 2
+        cedula: '',
+        nota: '',
+        motivo: '',
+        materia: ''
+    });
+    const [cursos, setCursos] = useState([]); // Inicializar como array vacío
+    const [materias, setMaterias] = useState([]);
+    const [cursoSeleccionado, setCursoSeleccionado] = useState('');
+    const [mensaje, setMensaje] = useState({});
+
+    useEffect(() => {
+        // Fetch cursos asociados al profesor desde el backend
+        const fetchCursos = async () => {
+            try {
+                const url = `${import.meta.env.VITE_BACKEND_URL}/profesor/cursos`;
+                const token = localStorage.getItem('token'); // Obtén el token de localStorage
+                const respuesta = await axios.get(url, {
+                    headers: {
+                        'Authorization': `Bearer ${token}` // Incluye el token en los encabezados
+                    }
+                });
+                setCursos(respuesta.data.cursosAsociados || []); // Asegurarse de que sea un array
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        fetchCursos();
+    }, [auth.id]);
+
+    const handleCursoChange = async (e) => {
+        const cursoId = e.target.value;
+        setCursoSeleccionado(cursoId);
+        setform({ ...form, materia: '' }); // Reset materia when a new course is selected
+        try {
+            const url = `${import.meta.env.VITE_BACKEND_URL}/profesor/${cursoId}/materias`;
+            const token = localStorage.getItem('token'); // Obtén el token de localStorage
+            const respuesta = await axios.get(url, {
+                headers: {
+                    'Authorization': `Bearer ${token}` // Incluye el token en los encabezados
+                }
+            });
+            console.log(respuesta.data);
+            const materiasDetalle = respuesta.data.materiasAsignadas.flatMap(asignacion => asignacion.materiasDetalle) || [];
+            setMaterias(materiasDetalle); // Asegurarse de que sea un array
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     const handleChange = (e) => {
-        setform({...form,
-            [e.target.name]:e.target.value
-        })
-    }
-
-    // paso 3
-
-    const [mensaje, setMensaje] = useState({})
+        const { name, value } = e.target;
+        setform({
+            ...form,
+            [name]: value
+        });
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log(form); // Log the form data to see if it's correctly populated
         try {
-            const url =  `${import.meta.env.VITE_BACKEND_URL}/registro-materia`;
+            const url = `${import.meta.env.VITE_BACKEND_URL}/actualizar-nota`;
             const token = localStorage.getItem('token'); // Obtén el token de localStorage
-            const respuesta = await axios.post(url, form, {
-              headers: {
-                'Authorization': `Bearer ${token}` // Incluye el token en los encabezados
-              }
+            const respuesta = await axios.patch(url, form, {
+                headers: {
+                    'Authorization': `Bearer ${token}` // Incluye el token en los encabezados
+                }
             });
             setMensaje({ respuesta: respuesta.data.msg, tipo: true });
-            setform({});
-          } catch (error) {
+            setform({ cedula: '', nota: '', motivo: '', materia: '' });
+            setCursoSeleccionado('');
+            setMaterias([]);
+        } catch (error) {
             console.log(error); // Log the entire error response for debugging
-            setMensaje({ respuesta: error.response.data.msg, tipo: false });
-          }
-      };
+            setMensaje({ respuesta: error.response.data.error, tipo: false });
+        }
+    };
 
-
-      return (
+    return (
         <>
             <div>
-
                 <div>
-                    {Object.keys(mensaje).length>0 && <Mensaje tipo={mensaje.tipo}>{mensaje.respuesta}</Mensaje>}
-              
+                    {Object.keys(mensaje).length > 0 && <Mensaje tipo={mensaje.tipo}>{mensaje.respuesta}</Mensaje>}
+
                     <form onSubmit={handleSubmit}>
-
-                    <div>
-                            <label className="text-gray-700 uppercase font-bold text-sm" htmlFor="nombre">Curso:</label>
-                            <input type="text" id="curso" name='curso'
-                                value={form.curso || ""} onChange={handleChange}
-                                placeholder="Ingresa el curso" className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5" required />
-                        </div>
                         <div>
-                            <label className="text-gray-700 uppercase font-bold text-sm" htmlFor="nombre">Nombre:</label>
-                            <input type="text" id="nombre" name='nombre'
-                                value={form.nombre || ""} onChange={handleChange}
-                                placeholder="Ingresa el nombre de la materia" className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5" required />
-                        </div>
-
-                        <div >
-                            <label className="text-gray-700 uppercase font-bold text-sm" htmlFor="apellido">Cedula Profesor:</label>
-                            <input type="text" id="cedulaProfesor" name='cedulaProfesor'
-                                value={form.cedulaProfesor || ""} onChange={handleChange}
-                                placeholder="Ingresa cedula del profesor asignado a la materia" className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5" required />
+                            <label className="text-gray-700 uppercase font-bold text-sm" htmlFor="cedula">Cedula:</label>
+                            <input
+                                type="text"
+                                id="cedula"
+                                name="cedula"
+                                value={form.cedula || ""}
+                                onChange={handleChange}
+                                placeholder="Ingresa la cedula del estudiante"
+                                className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5"
+                                required
+                            />
                         </div>
 
                         <div>
-                            <button className=" bg-gray-600 w-full p-3 text-slate-300 uppercase font-bold rounded-lg hover:bg-gray-900 cursor-pointer transition-al mt-4">Registrar</button>
+                            <label className="text-gray-700 uppercase font-bold text-sm" htmlFor="curso">Seleccionar Curso:</label>
+                            <select
+                                id="curso"
+                                name="curso"
+                                value={cursoSeleccionado}
+                                onChange={handleCursoChange}
+                                className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5"
+                                required
+                            >
+                                <option value="">Seleccione un curso</option>
+                                {Array.isArray(cursos) && cursos.map(curso => (
+                                    <option key={curso._id} value={curso._id}>{curso.nombre}</option>
+                                ))}
+                            </select>
                         </div>
 
+                        {cursoSeleccionado && (
+                            <div>
+                                <label className="text-gray-700 uppercase font-bold text-sm" htmlFor="materia">Seleccionar Materia:</label>
+                                <select
+                                    id="materia"
+                                    name="materia"
+                                    value={form.materia}
+                                    onChange={handleChange}
+                                    className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5"
+                                    required
+                                >
+                                    <option value="">Seleccione una materia</option>
+                                    {Array.isArray(materias) && materias.map(materia => (
+                                        <option key={materia._id} value={materia._id}>{materia.nombre}</option>
+                                    ))}
+                                </select>
+                            </div>
+                        )}
 
+                        <div>
+                            <label htmlFor="motivo" className="text-gray-700 uppercase font-bold text-sm">Motivo: </label>
+                            <textarea
+                                id="motivo"
+                                name="motivo"
+                                value={form.motivo || ""}
+                                onChange={handleChange}
+                                placeholder="Ingrese el motivo de la nota"
+                                className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5"
+                                required
+                            />
+                        </div>
+
+                        <div>
+                            <label className="text-gray-700 uppercase font-bold text-sm" htmlFor="nota">Nota:</label>
+                            <input
+                                type="number"
+                                id="nota"
+                                name="nota"
+                                value={form.nota || ""}
+                                onChange={handleChange}
+                                placeholder="Ingresa la nota"
+                                className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5"
+                                required
+                            />
+                        </div>
+
+                        <div>
+                            <button className="bg-gray-600 w-full p-3 text-slate-300 uppercase font-bold rounded-lg hover:bg-gray-900 cursor-pointer transition-al mt-4">Registrar</button>
+                        </div>
                     </form>
-
                 </div>
-
             </div>
-
         </>
-    )
-}
+    );
+};
+
+export default ActualizarNotasEstudiantes;
