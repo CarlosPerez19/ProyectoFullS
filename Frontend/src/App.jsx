@@ -31,6 +31,8 @@ import ProfesoresDashboard from './layout/ProfesoresDashboard'
 import RegisterNotas from './paginas/Profesor/RegisterNotas'
 import ActualizarNotas from './paginas/Profesor/ActualizarNotas'
 import ObservacionesEstudiantes from './paginas/Profesor/ObservacionesEstudiantes'
+import BuscarEstudiante from './paginas/Profesor/BuscarEstudiante'
+import RepresentanteDashboard from './layout/RepresentanteDashnoard'
 
 
 function App() {
@@ -137,7 +139,24 @@ function App() {
                   <PrivateRouteWithRole>
                     <ObservacionesEstudiantes />
                 </PrivateRouteWithRole>}/>
-              
+
+                <Route path='estudiante-materia' element={
+                  <PrivateRouteWithRole>
+                    <BuscarEstudiante />
+                </PrivateRouteWithRole>}/>
+              </Route>
+            </Routes>
+          </PrivateRoute>
+        } />
+
+        <Route path='/representante-dashboard/*' element={
+          <PrivateRoute>
+            <Routes>
+              <Route element={<RepresentanteDashboard />}>
+                <Route index element={<Perfil />} />
+                <Route path='listar' element={<Listar />} />
+                <Route path='visualizar/:id' element={<Visualizar />} />
+                
               </Route>
             </Routes>
           </PrivateRoute>

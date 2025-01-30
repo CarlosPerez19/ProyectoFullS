@@ -37,12 +37,15 @@ const Login = () => {
 
             if (respuesta.data.mensaje.includes('profesor')) {
                 navigate('/profesor-dashboard');
-            } else {
+            } else if (respuesta.data.mensaje.includes('representante')) { 
+                navigate('/representante-dashboard');
+            }
+            else {
                 navigate('/dashboard');
             }
 
         } catch (error) {
-            toast.error(error.response.data.msg)
+            toast.error(error.response.data.error)
             setform({})
             setTimeout(() => {
                 setMensaje({})

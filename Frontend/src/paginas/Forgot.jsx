@@ -19,10 +19,10 @@ export const Forgot = () => {
         try {
             const url = `${import.meta.env.VITE_BACKEND_URL}/recuperar-password`
             const respuesta = await axios.post(url, mail)
-            setMensaje({ respuesta: respuesta.data.msg, tipo: true })
+            setMensaje({ respuesta: respuesta.data.mensaje, tipo: true })
             setMail("")
         } catch (error) {
-            setMensaje({ respuesta: error.response.data.msg, tipo: false })
+            setMensaje({ respuesta: error.response.data.error, tipo: false })
         }
     }
 

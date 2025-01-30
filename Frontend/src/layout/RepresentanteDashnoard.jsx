@@ -4,7 +4,7 @@ import AuthContext from '../context/AuthProvider'
 
 
 
-const ProfesoresDashboard = () => {
+const RepresentanteDashboard = () => {
     const location = useLocation()
     const urlActual = location.pathname
 
@@ -16,7 +16,7 @@ const ProfesoresDashboard = () => {
 
             <div className='md:w-1/5 bg-gray-800 px-5 py-4'>
 
-                <h2 className='text-4xl font-black text-center text-slate-200'>Profesor</h2>
+                <h2 className='text-4xl font-black text-center text-slate-200'>Representante</h2>
 
                 <img src="https://cdn-icons-png.flaticon.com/512/2138/2138508.png" alt="img-client" className="m-auto mt-8 p-1 border-2 border-slate-500 rounded-full" width={120} height={120} />
                 <p className='text-slate-400 text-center my-4 text-sm'> <span className='bg-green-600 w-3 h-3 inline-block rounded-full'></span> Bienvenido - {auth?.nombre}</p>
@@ -26,28 +26,9 @@ const ProfesoresDashboard = () => {
                 <ul className="mt-5">
 
                     <li className="text-center">
-                        <Link to='/profesor-dashboard' className={`${urlActual === '/profesor-dashboard' ? 'text-slate-200 bg-gray-900 px-3 py-2 rounded-md text-center' : 'text-slate-600'} text-xl block mt-2 hover:text-slate-600`}>Perfil</Link>
+                        <Link to='/representante-dashboard' className={`${urlActual === '/representante-dashboard' ? 'text-slate-200 bg-gray-900 px-3 py-2 rounded-md text-center' : 'text-slate-600'} text-xl block mt-2 hover:text-slate-600`}>Perfil</Link>
                     </li>
 
-                    <li className="text-center">
-                        <Link to='/profesor-dashboard/registrar-nota' className={`${urlActual === '/profesor-dashboard/registrar-nota' ? 'text-slate-100 bg-gray-900 px-3 py-2 rounded-md text-center' : 'text-slate-600'} text-xl block mt-2 hover:text-slate-600`}>Registrar Notas</Link>
-                    </li>
-
-                    
-                    <li className="text-center">
-                        <Link to='/profesor-dashboard/actualizar-nota' className={`${urlActual === '/profesor-dashboard/actualizar-nota' ? 'text-slate-100 bg-gray-900 px-3 py-2 rounded-md text-center' : 'text-slate-600'} text-xl block mt-2 hover:text-slate-600`}>Actualizar Notas</Link>
-                    </li>
-
-                    
-                    <li className="text-center">
-                        <Link to='/profesor-dashboard/observacion-estudiante' className={`${urlActual === '/profesor-dashboard/observacion-estudiante' ? 'text-slate-100 bg-gray-900 px-3 py-2 rounded-md text-center' : 'text-slate-600'} text-xl block mt-2 hover:text-slate-600`}>Observaciones</Link>
-                    </li>
-
-                    
-                    <li className="text-center">
-                        <Link to='/profesor-dashboard/estudiante-materia' className={`${urlActual === '/profesor-dashboard/estudiante-materia' ? 'text-slate-100 bg-gray-900 px-3 py-2 rounded-md text-center' : 'text-slate-600'} text-xl block mt-2 hover:text-slate-600`}>Buscar Estudiante</Link>
-                    </li>
-                
                 </ul>
 
             </div>
@@ -80,4 +61,4 @@ const ProfesoresDashboard = () => {
     )
 }
 
-export default ProfesoresDashboard
+export default RepresentanteDashboard
