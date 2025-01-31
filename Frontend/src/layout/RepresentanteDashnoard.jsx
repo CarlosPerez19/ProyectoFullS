@@ -29,6 +29,25 @@ const RepresentanteDashboard = () => {
                         <Link to='/representante-dashboard' className={`${urlActual === '/representante-dashboard' ? 'text-slate-200 bg-gray-900 px-3 py-2 rounded-md text-center' : 'text-slate-600'} text-xl block mt-2 hover:text-slate-600`}>Perfil</Link>
                     </li>
 
+                    
+                    <li className="text-center">
+                        <Link to='/representante-dashboard/estudiante-registrado' className={`${urlActual === '/representante-dashboard/estudiante-registrado' ? 'text-slate-200 bg-gray-900 px-3 py-2 rounded-md text-center' : 'text-slate-600'} text-xl block mt-2 hover:text-slate-600`}>Representado</Link>
+                    </li>
+
+                    <li className="text-center">
+                        <Link to='/representante-dashboard/ver-notas' className={`${urlActual === '/representante-dashboard/ver-notas' ? 'text-slate-200 bg-gray-900 px-3 py-2 rounded-md text-center' : 'text-slate-600'} text-xl block mt-2 hover:text-slate-600`}>Notas</Link>
+                    </li>
+
+                    
+                    <li className="text-center">
+                        <Link to='/representante-dashboard/ver-observaciones' className={`${urlActual === '/representante-dashboard/ver-observaciones' ? 'text-slate-200 bg-gray-900 px-3 py-2 rounded-md text-center' : 'text-slate-600'} text-xl block mt-2 hover:text-slate-600`}>Observaciones</Link>
+                    </li>
+
+                    
+                    <li className="text-center">
+                        <Link to='/representante-dashboard/ver-asistencia' className={`${urlActual === '/representante-dashboard/ver-asistencia' ? 'text-slate-200 bg-gray-900 px-3 py-2 rounded-md text-center' : 'text-slate-600'} text-xl block mt-2 hover:text-slate-600`}>Asistencias</Link>
+                    </li>
+
                 </ul>
 
             </div>
