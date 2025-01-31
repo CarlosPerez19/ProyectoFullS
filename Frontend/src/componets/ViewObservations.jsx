@@ -41,7 +41,7 @@ export const ViewObservations = () => {
                     'Authorization': `Bearer ${token}` // Incluye el token en los encabezados
                 }
             });
-            setObservaciones(respuesta.data || []); // Asegurarse de que sea un array
+            setObservaciones(respuesta.data.representante || []); // Asegurarse de que sea un array
             console.log(respuesta.data);
         } catch (error) {
             console.error(error);
@@ -85,9 +85,9 @@ export const ViewObservations = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {observaciones.map((observacion, index) => (
-                                        observacion.observacionesDetalle.observaciones.map(obs => (
-                                            <tr key={obs._id}>
+                                    {observaciones.map((representante, index) => (
+                                        representante.observacionesDetalle.observaciones.map(obs => (
+                                            <tr key={index}>
                                                 <td className="border px-4 py-2">{obs.fecha}</td>
                                                 <td className="border px-4 py-2">{obs.observacion}</td>
                                                 <td className="border px-4 py-2">{obs.profesor}</td>
