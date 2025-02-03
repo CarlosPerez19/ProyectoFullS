@@ -6,21 +6,22 @@ const AuthContext = createContext()
 const AuthProvider = ({ children }) => {
     const [auth, setAuth] = useState({})
 
-    const perfil = async(token) => {
+    const perfil = async() => {
         try {
-            const url = `${import.meta.env.VITE_BACKEND_URL}/perfil`
-            const options={
+            const url = `${import.meta.env.VITE_BACKEND_URL}/perfil`;
+            const token = localStorage.getItem('token'); 
+            const respuesta = await axios.get(url, {
                 headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`
+                    'Authorization': `Bearer ${token}`
                 }
-            }
-            const respuesta= await axios.get(url,options)
+            });
             setAuth(respuesta.data)
+            console.log(respuesta.data)
         } catch (error) {
             console.log(error);
         }
     }
+
     useEffect(() => {
         const token = localStorage.getItem('token')
         if(token)
@@ -32,19 +33,19 @@ const AuthProvider = ({ children }) => {
     const actualizarPerfil = async(datos) => {
         const token = localStorage.getItem('token')
         try {
-            const url = `${import.meta.env.VITE_BACKEND_URL}/veterinario/${datos.id}`
+            const url = `${import.meta.env.VITE_BACKEND_URL}/cambiar-datos`
             const options = {
                 headers: {
-                    method: 'PUT',
+                    method: 'PATCH',
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}`
                 }
             }
-            const respuesta = await axios.put(url, datos, options)
+            const respuesta = await axios.patch(url, datos, options)
             perfil(token)
-            return {respuesta:respuesta.data.msg,tipo:true}
+            return {respuesta:respuesta.data.mensaje,tipo:true}
         } catch (error) {
-            return {respuesta:error.response.data.msg,tipo:false}
+            return {respuesta:error.response.data.error,tipo:false}
         }
 }
 
