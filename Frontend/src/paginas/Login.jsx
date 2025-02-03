@@ -31,7 +31,6 @@ const Login = () => {
             const respuesta = await axios.post(url, form);
             localStorage.setItem('token', respuesta.data.token);
 
-            // Fetch profile data
             const perfilUrl = `${import.meta.env.VITE_BACKEND_URL}/perfil`;
             const perfilRespuesta = await axios.get(perfilUrl, {
                 headers: {
