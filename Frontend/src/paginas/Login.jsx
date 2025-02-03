@@ -24,34 +24,40 @@ const Login = () => {
     }
 
     const handleSubmit = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
 
         try {
+            const url = `${import.meta.env.VITE_BACKEND_URL}/login`;
+            const respuesta = await axios.post(url, form);
+            localStorage.setItem('token', respuesta.data.token);
 
-            const url = `${import.meta.env.VITE_BACKEND_URL}/login`
-            const respuesta = await axios.post(url, form)
-            localStorage.setItem('token', respuesta.data.token)
-            setAuth(respuesta.data)
-            console.log(respuesta.data.rol)
-            console.log(respuesta.data)
+            // Fetch profile data
+            const perfilUrl = `${import.meta.env.VITE_BACKEND_URL}/perfil`;
+            const perfilRespuesta = await axios.get(perfilUrl, {
+                headers: {
+                    'Authorization': `Bearer ${respuesta.data.token}`
+                }
+            });
+
+            setAuth(perfilRespuesta.data);
+            console.log(perfilRespuesta.data);
 
             if (respuesta.data.mensaje.includes('profesor')) {
                 navigate('/profesor-dashboard');
             } else if (respuesta.data.mensaje.includes('representante')) { 
                 navigate('/representante-dashboard');
-            }
-            else {
+            } else {
                 navigate('/dashboard');
             }
 
         } catch (error) {
-            toast.error(error.response.data.error)
-            setform({})
+            toast.error(error.response.data.error);
+            setForm({});
             setTimeout(() => {
-                setMensaje({})
+                setMensaje({});
             }, 5000);
         }
-    }
+    };
 
     return (
         <>

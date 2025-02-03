@@ -8,6 +8,7 @@ import { useContext } from 'react';
 import { Disclosure } from '@headlessui/react';
 
 const Perfil = () => {
+    
     const { auth } = useContext(AuthContext);
 
     return (

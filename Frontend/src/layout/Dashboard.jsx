@@ -5,6 +5,7 @@ import AuthContext from '../context/AuthProvider'
 
 
 const Dashboard = () => {
+    
     const location = useLocation()
     const urlActual = location.pathname
 
