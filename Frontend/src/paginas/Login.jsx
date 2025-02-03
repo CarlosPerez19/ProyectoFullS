@@ -74,15 +74,15 @@ const Login = () => {
 
                     <form onSubmit={handleSubmit}>
                         <div className="mb-3">
-                            <label className="mb-2 block text-sm font-semibold">Email</label>
-                            <input type="email" placeholder="Enter you email"
+                            <label className="mb-2 block text-sm font-semibold">Correo</label>
+                            <input type="email" placeholder="Ingresa tu correo"
                                 name='email'
                                 value={form.email || ""} onChange={handleChange}
                                 className="block w-full rounded-md border border-gray-300 focus:border-purple-700 focus:outline-none focus:ring-1 focus:ring-purple-700 py-1 px-2 text-gray-500" />
                         </div>
 
                         <div className="mb-3">
-                            <label className="mb-2 block text-sm font-semibold">Password</label>
+                            <label className="mb-2 block text-sm font-semibold">Contraseña</label>
                             <input type="password" placeholder="********************"
                                 name='password'
                                 value={form.password || ""} onChange={handleChange}
@@ -90,13 +90,13 @@ const Login = () => {
                         </div>
 
                         <div className="my-4">
-                            <button className="py-2 w-full block text-center bg-gray-500 text-slate-300 border rounded-xl hover:scale-100 duration-300 hover:bg-gray-900 hover:text-white">Login</button>
+                            <button className="py-2 w-full block text-center bg-gray-500 text-slate-300 border rounded-xl hover:scale-100 duration-300 hover:bg-gray-900 hover:text-white">Iniciar Sesion</button>
                         </div>  
 
                     </form>
 
                     <div className="mt-5 text-xs border-b-2 py-4 ">
-                        <Link to="/forgot/id" className="underline text-sm text-gray-400 hover:text-gray-900">Forgot your password?</Link>
+                        <Link to="/forgot/id" className="underline text-sm text-gray-400 hover:text-gray-900">¿Olvidaste tu contraseña?</Link>
                     </div>
 
                 </div>
