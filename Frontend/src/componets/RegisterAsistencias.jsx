@@ -62,7 +62,7 @@ export const RegisterAsistencias = () => {
             ...form,
             asistencias: {
                 ...form.asistencias,
-                [estudianteId]: e.target.value === 'presente'
+                [estudianteId]: e.target.value 
             }
         });
     };

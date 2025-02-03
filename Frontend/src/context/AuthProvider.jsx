@@ -75,7 +75,8 @@ const actualizarPassword = async (datos) => {
                 auth,
                 setAuth,
                 actualizarPerfil,
-                actualizarPassword            
+                actualizarPassword,
+                perfil            
             }
         }>
             {children}

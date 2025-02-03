@@ -2,7 +2,7 @@ import React from 'react';
 import { CardPerfil } from '../componets/Perfil/CardPerfil';
 import FormularioPerfil from '../componets/Perfil/FormularioPerfil';
 import Password from '../componets/Perfil/Password';
-import { CardPerfilPaciente } from '../componets/Perfil/CardPerfilPaciente';
+import { CardPerfilAdmin } from '../componets/Perfil/CardPerfilAdmin';
 import AuthContext from '../context/AuthProvider';
 import { useContext } from 'react';
 import { Disclosure } from '@headlessui/react';
@@ -19,8 +19,8 @@ const Perfil = () => {
             </div>
 
             {
-                "propietario" in auth 
-                    ? (<CardPerfilPaciente/>)
+                "administrador" in auth 
+                    ? (<CardPerfilAdmin/>)
                     : (
                         <div className='flex flex-col gap-y-8'>
                             <div className='w-full'>
