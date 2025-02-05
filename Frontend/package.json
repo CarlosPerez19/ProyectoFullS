@@ -18,7 +18,8 @@
     "react-router-dom": "^6.6.1",
     "react-slick": "^0.30.3",
     "react-toastify": "^11.0.2",
-    "slick-carousel": "^1.8.1"
+    "slick-carousel": "^1.8.1",
+    "vercel": "^41.0.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.26",
