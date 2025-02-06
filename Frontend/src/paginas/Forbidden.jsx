@@ -1,6 +1,3 @@
-
-import logoDog from '../assets/doglost.jpg'
-
 export const Forbidden = () => {
     return (
         

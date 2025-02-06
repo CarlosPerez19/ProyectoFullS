@@ -1,4 +1,4 @@
-import logoDog from '../assets/dog-hand.webp'
+
 import { Link } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify';
 import { useEffect, useState } from 'react'

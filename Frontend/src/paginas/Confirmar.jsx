@@ -1,7 +1,5 @@
-import logoDog from '../assets/dog-hand.webp'
 import {Link} from 'react-router-dom'
 import Mensaje from '../componets/Alertas/Mensajes'
-
 import { useState,useEffect } from 'react'
 import { useParams } from 'react-router-dom';
 import axios from 'axios';

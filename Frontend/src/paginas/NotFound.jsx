@@ -1,4 +1,3 @@
-import logoDog from '../assets/doglost.jpg'
 import {Link} from 'react-router-dom'
 
 
