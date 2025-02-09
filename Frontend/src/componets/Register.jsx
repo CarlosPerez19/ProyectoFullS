@@ -25,15 +25,21 @@ export const Register = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+      
+
         try {
-          const url =  `${import.meta.env.VITE_BACKEND_URL}/registro`;
-          const respuesta = await axios.post(url, form);
-          setMensaje({ respuesta: respuesta.data.msg, tipo: true });
-          setform({});
+            const url = `${import.meta.env.VITE_BACKEND_URL}/registro`;
+            const token = localStorage.getItem('token'); 
+            const respuesta = await axios.post(url, form, {
+                headers: {
+                    'Authorization': `Bearer ${token}` 
+                }
+            });
+            setMensaje({ respuesta: respuesta.data.msg, tipo: true });
+            setform({})
         } catch (error) {
-          
-          setMensaje({ respuesta: error.response.data.error, tipo: false });
+            
+            setMensaje({ respuesta: error.response.data.error, tipo: false });
         }
       };
 
