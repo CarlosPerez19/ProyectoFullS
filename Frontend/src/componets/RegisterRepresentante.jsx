@@ -27,19 +27,19 @@ export const RegisterRepresentante = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(form); // Log the form data to see if it's correctly populated
+        
         try {
             const url =  `${import.meta.env.VITE_BACKEND_URL}/registro-representante`;
-            const token = localStorage.getItem('token'); // Obtén el token de localStorage
+            const token = localStorage.getItem('token'); 
             const respuesta = await axios.post(url, form, {
               headers: {
-                'Authorization': `Bearer ${token}` // Incluye el token en los encabezados
+                'Authorization': `Bearer ${token}` 
               }
             });
             setMensaje({ respuesta: respuesta.data.msg, tipo: true });
             setform({});
           } catch (error) {
-            console.log(error.response); // Log the entire error response for debugging
+            
             setMensaje({ respuesta: error.response.data.error, tipo: false });
           }
       };

@@ -32,20 +32,19 @@ export const JustifyInasistencia = () => {
             ...form,
             fecha: formatFecha(form.fecha)
         };
-        console.log(formattedForm);
-        console.log(formatFecha(form.fecha)) // Log the form data to see if it's correctly populated
+        
         try {
             const url =  `${import.meta.env.VITE_BACKEND_URL}/justificar-inasistencia`;
-            const token = localStorage.getItem('token'); // Obtén el token de localStorage
+            const token = localStorage.getItem('token'); 
             const respuesta = await axios.patch(url, formattedForm, {
               headers: {
-                'Authorization': `Bearer ${token}` // Incluye el token en los encabezados
+                'Authorization': `Bearer ${token}` 
               }
             });
             setMensaje({ respuesta: respuesta.data.msg, tipo: true });
             setform({ cedula: "", justificacion: "", fecha: "" });
           } catch (error) {
-            console.log(error.response); // Log the entire error response for debugging
+            
             setMensaje({ respuesta: error.response.data.error, tipo: false });
           }
       };

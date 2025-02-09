@@ -4,30 +4,30 @@ import Mensaje from '../componets/Alertas/Mensajes';
 import AuthContext from '../context/AuthProvider';
 
 export const ActualizarNotasEstudiantes = () => {
-    const { auth } = useContext(AuthContext); // Obtener el contexto de autenticación
+    const { auth } = useContext(AuthContext); 
     const [form, setform] = useState({
         cedula: '',
         nota: '',
         motivo: '',
         materia: ''
     });
-    const [cursos, setCursos] = useState([]); // Inicializar como array vacío
+    const [cursos, setCursos] = useState([]); 
     const [materias, setMaterias] = useState([]);
     const [cursoSeleccionado, setCursoSeleccionado] = useState('');
     const [mensaje, setMensaje] = useState({});
 
     useEffect(() => {
-        // Fetch cursos asociados al profesor desde el backend
+        
         const fetchCursos = async () => {
             try {
                 const url = `${import.meta.env.VITE_BACKEND_URL}/profesor/cursos`;
-                const token = localStorage.getItem('token'); // Obtén el token de localStorage
+                const token = localStorage.getItem('token'); 
                 const respuesta = await axios.get(url, {
                     headers: {
-                        'Authorization': `Bearer ${token}` // Incluye el token en los encabezados
+                        'Authorization': `Bearer ${token}` 
                     }
                 });
-                setCursos(respuesta.data.cursosAsociados || []); // Asegurarse de que sea un array
+                setCursos(respuesta.data.cursosAsociados || []); 
             } catch (error) {
                 console.error(error);
             }
@@ -38,18 +38,18 @@ export const ActualizarNotasEstudiantes = () => {
     const handleCursoChange = async (e) => {
         const cursoId = e.target.value;
         setCursoSeleccionado(cursoId);
-        setform({ ...form, materia: '' }); // Reset materia when a new course is selected
+        setform({ ...form, materia: '' }); 
         try {
             const url = `${import.meta.env.VITE_BACKEND_URL}/profesor/${cursoId}/materias`;
-            const token = localStorage.getItem('token'); // Obtén el token de localStorage
+            const token = localStorage.getItem('token'); 
             const respuesta = await axios.get(url, {
                 headers: {
-                    'Authorization': `Bearer ${token}` // Incluye el token en los encabezados
+                    'Authorization': `Bearer ${token}`
                 }
             });
             console.log(respuesta.data);
             const materiasDetalle = respuesta.data.materiasAsignadas.flatMap(asignacion => asignacion.materiasDetalle) || [];
-            setMaterias(materiasDetalle); // Asegurarse de que sea un array
+            setMaterias(materiasDetalle); 
         } catch (error) {
             console.error(error);
         }
@@ -65,13 +65,13 @@ export const ActualizarNotasEstudiantes = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(form); // Log the form data to see if it's correctly populated
+        
         try {
             const url = `${import.meta.env.VITE_BACKEND_URL}/actualizar-nota`;
-            const token = localStorage.getItem('token'); // Obtén el token de localStorage
+            const token = localStorage.getItem('token'); 
             const respuesta = await axios.patch(url, form, {
                 headers: {
-                    'Authorization': `Bearer ${token}` // Incluye el token en los encabezados
+                    'Authorization': `Bearer ${token}` 
                 }
             });
             setMensaje({ respuesta: respuesta.data.msg, tipo: true });
@@ -79,7 +79,6 @@ export const ActualizarNotasEstudiantes = () => {
             setCursoSeleccionado('');
             setMaterias([]);
         } catch (error) {
-            console.log(error); // Log the entire error response for debugging
             setMensaje({ respuesta: error.response.data.error, tipo: false });
         }
     };

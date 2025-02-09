@@ -4,25 +4,25 @@ import Mensaje from '../componets/Alertas/Mensajes';
 import AuthContext from '../context/AuthProvider';
 
 export const ViewAsistance = () => {
-    const { auth } = useContext(AuthContext); // Obtener el contexto de autenticación
+    const { auth } = useContext(AuthContext); 
     const [estudiantes, setEstudiantes] = useState([]);
     const [asistencias, setAsistencias] = useState([]);
     const [estudianteSeleccionado, setEstudianteSeleccionado] = useState('');
     const [mensaje, setMensaje] = useState({});
 
     useEffect(() => {
-        // Fetch estudiantes asociados al representante desde el backend
+        
         const fetchEstudiantes = async () => {
             try {
                 const url = `${import.meta.env.VITE_BACKEND_URL}/estudiantes-registrados`;
-                const token = localStorage.getItem('token'); // Obtén el token de localStorage
+                const token = localStorage.getItem('token'); 
                 const respuesta = await axios.get(url, {
                     headers: {
-                        'Authorization': `Bearer ${token}` // Incluye el token en los encabezados
+                        'Authorization': `Bearer ${token}` 
                     }
                 });
-                setEstudiantes(respuesta.data || []); // Asegurarse de que sea un array
-                console.log(respuesta.data);
+                setEstudiantes(respuesta.data || []); 
+                
             } catch (error) {
                 console.error(error);
             }
@@ -35,14 +35,14 @@ export const ViewAsistance = () => {
         setEstudianteSeleccionado(idEstudiante);
         try {
             const url = `${import.meta.env.VITE_BACKEND_URL}/ver-asistencia-estudiante/${idEstudiante}`;
-            const token = localStorage.getItem('token'); // Obtén el token de localStorage
+            const token = localStorage.getItem('token'); 
             const respuesta = await axios.get(url, {
                 headers: {
-                    'Authorization': `Bearer ${token}` // Incluye el token en los encabezados
+                    'Authorization': `Bearer ${token}` 
                 }
             });
-            setAsistencias(respuesta.data || []); // Asegurarse de que sea un array
-            console.log(respuesta.data);
+            setAsistencias(respuesta.data || []); 
+            
         } catch (error) {
             console.error(error);
         }

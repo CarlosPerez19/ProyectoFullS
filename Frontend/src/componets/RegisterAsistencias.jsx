@@ -14,14 +14,14 @@ export const RegisterAsistencias = () => {
     const [cursoSeleccionado, setCursoSeleccionado] = useState(null);
 
     useEffect(() => {
-        // Fetch cursos from the backend
+       
         const fetchCursos = async () => {
             try {
                 const url = `${import.meta.env.VITE_BACKEND_URL}/cursos`;
-                const token = localStorage.getItem('token'); // Obtén el token de localStorage
+                const token = localStorage.getItem('token'); 
                 const respuesta = await axios.get(url, {
                     headers: {
-                        'Authorization': `Bearer ${token}` // Incluye el token en los encabezados
+                        'Authorization': `Bearer ${token}` 
                     }
                 });
                 setCursos(respuesta.data);
@@ -45,10 +45,10 @@ export const RegisterAsistencias = () => {
         setform({ ...form, curso: cursoId });
         try {
             const url = `${import.meta.env.VITE_BACKEND_URL}/cursos/${cursoId}/estudiantes`;
-            const token = localStorage.getItem('token'); // Obtén el token de localStorage
+            const token = localStorage.getItem('token');
             const respuesta = await axios.get(url, {
                 headers: {
-                    'Authorization': `Bearer ${token}` // Incluye el token en los encabezados
+                    'Authorization': `Bearer ${token}` 
                 }
             });
             setEstudiantes(respuesta.data);
@@ -69,19 +69,19 @@ export const RegisterAsistencias = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(form); // Log the form data to see if it's correctly populated
+        
         try {
             const url = `${import.meta.env.VITE_BACKEND_URL}/registro-asistencia`;
-            const token = localStorage.getItem('token'); // Obtén el token de localStorage
+            const token = localStorage.getItem('token'); 
             const respuesta = await axios.post(url, form, {
                 headers: {
-                    'Authorization': `Bearer ${token}` // Incluye el token en los encabezados
+                    'Authorization': `Bearer ${token}` 
                 }
             });
             setMensaje({ respuesta: respuesta.data.msg, tipo: true });
             setform({ curso: "", asistencias: {} });
         } catch (error) {
-            console.log(error.response); // Log the entire error response for debugging
+            
             setMensaje({ respuesta: error.response.data.error, tipo: false });
         }
     };

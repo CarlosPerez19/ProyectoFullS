@@ -28,20 +28,20 @@ export const RegisterProfesores = () => {
         
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(form); // Log the form data to see if it's correctly populated
+        
         try {
             const url =  `${import.meta.env.VITE_BACKEND_URL}/registro-profesor`;
-            const token = localStorage.getItem('token'); // Obtén el token de localStorage
+            const token = localStorage.getItem('token'); 
             const respuesta = await axios.post(url, form, {
               headers: {
-                'Authorization': `Bearer ${token}` // Incluye el token en los encabezados
+                'Authorization': `Bearer ${token}` 
               }
             });
-            console.log(respuesta.data); // Log the response data
-            setMensaje({ respuesta: respuesta.data.msg, tipo: true }); // Actualiza el mensaje en caso de éxito
+            
+            setMensaje({ respuesta: respuesta.data.msg, tipo: true }); 
           } catch (error) {
-            console.error(error);
-            setMensaje({ respuesta: error.response.data.error, tipo: false }); // Actualiza el mensaje en caso de error
+            
+            setMensaje({ respuesta: error.response.data.error, tipo: false }); 
           }
     };
 

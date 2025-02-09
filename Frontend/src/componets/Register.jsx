@@ -25,14 +25,14 @@ export const Register = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(form); // Log the form data to see if it's correctly populated
+        
         try {
           const url =  `${import.meta.env.VITE_BACKEND_URL}/registro`;
           const respuesta = await axios.post(url, form);
           setMensaje({ respuesta: respuesta.data.msg, tipo: true });
           setform({});
         } catch (error) {
-          console.log(error.response); // Log the entire error response for debugging
+          
           setMensaje({ respuesta: error.response.data.msg, tipo: false });
         }
       };

@@ -4,7 +4,7 @@ import Mensaje from '../componets/Alertas/Mensajes';
 import AuthContext from '../context/AuthProvider';
 
 export const SearchStudent = () => {
-    const { auth } = useContext(AuthContext); // Obtener el contexto de autenticación
+    const { auth } = useContext(AuthContext); 
     const [form, setform] = useState({});
     const [cursos, setCursos] = useState([]); 
     const [materias, setMaterias] = useState([]);
@@ -35,18 +35,18 @@ export const SearchStudent = () => {
     const handleCursoChange = async (e) => {
         const cursoId = e.target.value;
         setCursoSeleccionado(cursoId);
-        setform({ ...form, materia: '' }); // Reset materia when a new course is selected
+        setform({ ...form, materia: '' }); 
         try {
             const url = `${import.meta.env.VITE_BACKEND_URL}/profesor/${cursoId}/materias`;
-            const token = localStorage.getItem('token'); // Obtén el token de localStorage
+            const token = localStorage.getItem('token'); 
             const respuesta = await axios.get(url, {
                 headers: {
-                    'Authorization': `Bearer ${token}` // Incluye el token en los encabezados
+                    'Authorization': `Bearer ${token}` 
                 }
             });
-            console.log(respuesta.data);
+            
             const materiasDetalle = respuesta.data.materiasAsignadas.flatMap(asignacion => asignacion.materiasDetalle) || [];
-            setMaterias(materiasDetalle); // Asegurarse de que sea un array
+            setMaterias(materiasDetalle); 
         } catch (error) {
             console.error(error);
         }
@@ -57,16 +57,16 @@ export const SearchStudent = () => {
         setform({ ...form, materia: materiaId });
         try {
             const url = `${import.meta.env.VITE_BACKEND_URL}/profesor/${materiaId}/estudiantes`;
-            const token = localStorage.getItem('token'); // Obtén el token de localStorage
+            const token = localStorage.getItem('token'); 
             const respuesta = await axios.get(url, {
                 headers: {
-                    'Authorization': `Bearer ${token}` // Incluye el token en los encabezados
+                    'Authorization': `Bearer ${token}` 
                 }
             });
             console.log(respuesta.data);
-            setEstudiantes(respuesta.data.estudiantesPorMateria || []); // Asegurarse de que sea un array
+            setEstudiantes(respuesta.data.estudiantesPorMateria || []); 
 
-            // Obtener los motivos únicos de las notas
+            
             const motivosUnicos = new Set();
             respuesta.data.estudiantesPorMateria.forEach(estudiante => {
                 estudiante.notasDetalle.forEach(nota => {

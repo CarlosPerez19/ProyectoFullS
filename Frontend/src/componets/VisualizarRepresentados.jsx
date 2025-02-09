@@ -4,22 +4,22 @@ import Mensaje from '../componets/Alertas/Mensajes';
 import AuthContext from '../context/AuthProvider';
 
 export const VisualizarRepresentados = () => {
-    const { auth } = useContext(AuthContext); // Obtener el contexto de autenticación
+    const { auth } = useContext(AuthContext); 
     const [estudiantes, setEstudiantes] = useState([]);
     const [mensaje, setMensaje] = useState({});
 
     useEffect(() => {
-        // Fetch estudiantes asociados al representante desde el backend
+        
         const fetchEstudiantes = async () => {
             try {
                 const url = `${import.meta.env.VITE_BACKEND_URL}/estudiantes-registrados`;
-                const token = localStorage.getItem('token'); // Obtén el token de localStorage
+                const token = localStorage.getItem('token'); 
                 const respuesta = await axios.get(url, {
                     headers: {
-                        'Authorization': `Bearer ${token}` // Incluye el token en los encabezados
+                        'Authorization': `Bearer ${token}` 
                     }
                 });
-                setEstudiantes(respuesta.data || []); // Asegurarse de que sea un array
+                setEstudiantes(respuesta.data || []); 
             } catch (error) {
                 console.error(error);
             }
