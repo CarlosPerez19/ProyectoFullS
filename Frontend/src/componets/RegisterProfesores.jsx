@@ -42,7 +42,7 @@ export const RegisterProfesores = () => {
           } catch (error) {
             
             setMensaje({ respuesta: error.response.data.error, tipo: false }); 
-          }
+        }
     };
 
 
