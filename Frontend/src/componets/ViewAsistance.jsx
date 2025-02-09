@@ -11,7 +11,6 @@ export const ViewAsistance = () => {
     const [mensaje, setMensaje] = useState({});
 
     useEffect(() => {
-        
         const fetchEstudiantes = async () => {
             try {
                 const url = `${import.meta.env.VITE_BACKEND_URL}/estudiantes-registrados`;
@@ -22,7 +21,6 @@ export const ViewAsistance = () => {
                     }
                 });
                 setEstudiantes(respuesta.data || []); 
-                
             } catch (error) {
                 console.error(error);
             }
@@ -42,7 +40,6 @@ export const ViewAsistance = () => {
                 }
             });
             setAsistencias(respuesta.data || []); 
-            
         } catch (error) {
             console.error(error);
         }
@@ -86,8 +83,8 @@ export const ViewAsistance = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {asistencias.map((asistencia, index) => (
-                                        asistencia.asistenciasDetalle.asistencia.map(asist => (
+                                    {Array.isArray(asistencias) && asistencias.map((asistencia, index) => (
+                                        Array.isArray(asistencia.asistenciasDetalle.asistencia) && asistencia.asistenciasDetalle.asistencia.map(asist => (
                                             <tr key={asist._id}>
                                                 <td className="border px-4 py-2">{asist.fecha}</td>
                                                 <td className="border px-4 py-2">{asist.presente ? 'Sí' : 'No'}</td>

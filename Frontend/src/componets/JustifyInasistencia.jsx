@@ -21,8 +21,8 @@ export const JustifyInasistencia = () => {
     const formatFecha = (fecha) => {
         const date = new Date(fecha);
         const year = date.getFullYear();
-        const month = String(date.getMonth());
-        const day = String(date.getDate());
+        const month = String(date.getMonth() + 1);
+        const day = String(date.getDate() + 1);
         return `${year}/${month}/${day}`;
     }
 
@@ -31,8 +31,9 @@ export const JustifyInasistencia = () => {
         const formattedForm = {
             ...form,
             fecha: formatFecha(form.fecha)
+            
         };
-        
+
         try {
             const url =  `${import.meta.env.VITE_BACKEND_URL}/justificar-inasistencia`;
             const token = localStorage.getItem('token'); 

@@ -9,7 +9,8 @@ export const Register = () => {
     const [form, setform] = useState({
         nombre: "",
         apellido: "",
-        email: ""
+        email: "",
+        password:""
     })
     
     // paso 2
@@ -36,6 +37,8 @@ export const Register = () => {
             });
             
             setMensaje({ respuesta: respuesta.data.msg, tipo: true }); 
+            setform({})
+            
           } catch (error) {
             
             setMensaje({ respuesta: error.response.data.error, tipo: false }); 
@@ -69,6 +72,14 @@ export const Register = () => {
                             <label className="text-gray-700 uppercase font-bold text-sm" htmlFor="email">Email:</label>
                             <input type="email" id="email" name='email'
                                 value={form.email || ""} onChange={handleChange}
+                                placeholder="Ingresa tu email" className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5" required />
+                        </div>
+
+                        
+                        <div >
+                            <label className="text-gray-700 uppercase font-bold text-sm" htmlFor="email">Contraseña:</label>
+                            <input type="password" id="password" name='password'
+                                value={form.password || ""} onChange={handleChange}
                                 placeholder="Ingresa tu email" className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5" required />
                         </div>
 

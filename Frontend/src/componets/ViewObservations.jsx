@@ -42,7 +42,7 @@ export const ViewObservations = () => {
                 }
             });
             setObservaciones(respuesta.data.representante || []); 
-            
+            console.log(respuesta.data)
         } catch (error) {
             console.error(error);
         }
