@@ -33,7 +33,7 @@ export const Register = () => {
           setform({});
         } catch (error) {
           
-          setMensaje({ respuesta: error.response.data.msg, tipo: false });
+          setMensaje({ respuesta: error.response.data.error, tipo: false });
         }
       };
 
