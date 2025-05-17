@@ -1,45 +1,45 @@
 import React, { useState } from 'react'
-import { RegisterCursos } from '../../componets/RegisterCursos'
-import { ActualizarCursos } from '../../componets/ActualizarCursos';
+import { RegisterMaterias } from '../../componets/RegisterMaterias'
+import { ActualizarMaterias } from '../../componets/ActualizarMaterias';
 
-const cursosEjemplo = [
-    { id: 1, nombre: '1ro Básico', paralelo: 'A' },
-    { id: 2, nombre: '2do Básico', paralelo: 'B' },
+const materiasEjemplo = [
+    { id: 1, nombre: 'Matemáticas', codigo: 'MAT101' },
+    { id: 2, nombre: 'Lengua', codigo: 'LEN102' },
 ];
 
-const RegistrarCurso = () => {
+const RegistrarMateria = () => {
     const [mostrarRegistro, setMostrarRegistro] = useState(false);
     const [mostrarEditar, setMostrarEditar] = useState(false);
-    const [cursoEditar, setCursoEditar] = useState(null);
-    const [cursos, setCursos] = useState(cursosEjemplo);
+    const [materiaEditar, setMateriaEditar] = useState(null);
+    const [materias, setMaterias] = useState(materiasEjemplo);
 
-    const handleEditar = (curso) => {
-        setCursoEditar(curso);
+    const handleEditar = (materia) => {
+        setMateriaEditar(materia);
         setMostrarEditar(true);
     };
 
     const handleEliminar = (id) => {
-        setCursos(cursos.filter(curso => curso.id !== id));
+        setMaterias(materias.filter(mat => mat.id !== id));
     };
 
     const closeModal = () => {
         setMostrarRegistro(false);
         setMostrarEditar(false);
-        setCursoEditar(null);
+        setMateriaEditar(null);
     };
 
     return (
         <div>
-            <h1 className='font-black text-4xl text-gray-500 text-center'>Registrar Curso</h1>
+            <h1 className='font-black text-4xl text-gray-500 text-center'>Registrar Materias</h1>
             <hr className='my-4' />
-            <p className='mb-8 text-center'>Este módulo te permite registrar un curso</p>
+            <p className='mb-8 text-center'>Este módulo te permite registrar una materia</p>
             
             <div className="flex justify-center mb-8">
                 <button
                     className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-800"
                     onClick={() => setMostrarRegistro(true)}
                 >
-                    Registrar Curso
+                    Registrar Materia
                 </button>
             </div>
 
@@ -47,7 +47,7 @@ const RegistrarCurso = () => {
             {mostrarRegistro && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
                     <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
-                        <RegisterCursos />
+                        <RegisterMaterias />
                         <button
                             className="mt-4 bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-600 w-full"
                             onClick={closeModal}
@@ -63,7 +63,7 @@ const RegistrarCurso = () => {
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
                     <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
                         {/* Componente para actualizar profesor */}
-                        <ActualizarCursos curso={cursoEditar} onClose={closeModal} />
+                        <ActualizarMaterias profesor={materiaEditar} onClose={closeModal} />
                         <button
                             className="mt-4 bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-600 w-full"
                             onClick={closeModal}
@@ -79,34 +79,34 @@ const RegistrarCurso = () => {
                     <thead>
                         <tr>
                             <th className="py-2 px-4 border-b">Nombre</th>
-                            <th className="py-2 px-4 border-b">Paralelo</th>
+                            <th className="py-2 px-4 border-b">Código</th>
                             <th className="py-2 px-4 border-b">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {cursos.map(curso => (
-                            <tr key={curso.id}>
-                                <td className="py-2 px-4 border-b text-center">{curso.nombre}</td>
-                                <td className="py-2 px-4 border-b text-center">{curso.paralelo}</td>
+                        {materias.map(mat => (
+                            <tr key={mat.id}>
+                                <td className="py-2 px-4 border-b text-center">{mat.nombre}</td>
+                                <td className="py-2 px-4 border-b text-center">{mat.codigo}</td>
                                 <td className="py-2 px-4 border-b text-center">
                                     <button
                                         className="bg-yellow-400 text-white px-2 py-1 rounded mr-2 hover:bg-yellow-600"
-                                        onClick={() => handleEditar(curso)}
+                                        onClick={() => handleEditar(mat)}
                                     >
                                         Editar
                                     </button>
                                     <button
                                         className="bg-red-600 text-white px-2 py-1 rounded hover:bg-red-800"
-                                        onClick={() => handleEliminar(curso.id)}
+                                        onClick={() => handleEliminar(mat.id)}
                                     >
                                         Eliminar
                                     </button>
                                 </td>
                             </tr>
                         ))}
-                        {cursos.length === 0 && (
+                        {materias.length === 0 && (
                             <tr>
-                                <td colSpan="3" className="text-center py-4">No hay cursos registrados.</td>
+                                <td colSpan="3" className="text-center py-4">No hay materias registradas.</td>
                             </tr>
                         )}
                     </tbody>
@@ -116,4 +116,4 @@ const RegistrarCurso = () => {
     )
 }
 
-export default RegistrarCurso
+export default RegistrarMateria

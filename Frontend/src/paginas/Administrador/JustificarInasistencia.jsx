@@ -1,6 +1,6 @@
 import React from 'react'
-import { Register } from '../componets/Register'
-import { JustifyInasistencia } from '../componets/JustifyInasistencia'
+import { Register } from '../../componets/Register'
+import { JustifyInasistencia } from '../../componets/JustifyInasistencia'
 
 const JustificarInasistencia = () => {
     return (

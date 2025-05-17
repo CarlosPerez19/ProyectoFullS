@@ -31,27 +31,27 @@ const Dashboard = () => {
 
 
                     <li className="text-center">
-                        <Link to='/dashboard/registrar' className={`${urlActual === '/dashboard/registrar' ? 'text-slate-100 bg-gray-900 px-3 py-2 rounded-md text-center' : 'text-slate-600'} text-xl block mt-2 hover:text-slate-600`}>Registrar Administrador</Link>
+                        <Link to='/dashboard/registrar' className={`${urlActual === '/dashboard/registrar' ? 'text-slate-100 bg-gray-900 px-3 py-2 rounded-md text-center' : 'text-slate-600'} text-xl block mt-2 hover:text-slate-600`}>Administradores</Link>
                     </li>
 
                     <li className="text-center">
-                        <Link to='/dashboard/registrar-profesor' className={`${urlActual === '/dashboard/registrar-profesor' ? 'text-slate-100 bg-gray-900 px-3 py-2 rounded-md text-center' : 'text-slate-600'} text-xl block mt-2 hover:text-slate-600`}>Registrar Profesores</Link>
+                        <Link to='/dashboard/registrar-profesor' className={`${urlActual === '/dashboard/registrar-profesor' ? 'text-slate-100 bg-gray-900 px-3 py-2 rounded-md text-center' : 'text-slate-600'} text-xl block mt-2 hover:text-slate-600`}>Profesores</Link>
                     </li>
 
                     <li className="text-center">
-                        <Link to='/dashboard/registrar-representante' className={`${urlActual === '/dashboard/registrar-representante' ? 'text-slate-100 bg-gray-900 px-3 py-2 rounded-md text-center' : 'text-slate-600'} text-xl block mt-2 hover:text-slate-600`}>Registrar Representantes</Link>
+                        <Link to='/dashboard/registrar-representante' className={`${urlActual === '/dashboard/registrar-representante' ? 'text-slate-100 bg-gray-900 px-3 py-2 rounded-md text-center' : 'text-slate-600'} text-xl block mt-2 hover:text-slate-600`}>Representantes</Link>
                     </li>
 
                     <li className="text-center">
-                        <Link to='/dashboard/registrar-curso' className={`${urlActual === '/dashboard/registrar-curso' ? 'text-slate-100 bg-gray-900 px-3 py-2 rounded-md text-center' : 'text-slate-600'} text-xl block mt-2 hover:text-slate-600`}>Registrar Cursos</Link>
+                        <Link to='/dashboard/registrar-curso' className={`${urlActual === '/dashboard/registrar-curso' ? 'text-slate-100 bg-gray-900 px-3 py-2 rounded-md text-center' : 'text-slate-600'} text-xl block mt-2 hover:text-slate-600`}>Cursos</Link>
                     </li>
 
                     <li className="text-center">
-                        <Link to='/dashboard/registrar-materia' className={`${urlActual === '/dashboard/registrar-materia' ? 'text-slate-100 bg-gray-900 px-3 py-2 rounded-md text-center' : 'text-slate-600'} text-xl block mt-2 hover:text-slate-600`}>Registrar Materias</Link>
+                        <Link to='/dashboard/registrar-materia' className={`${urlActual === '/dashboard/registrar-materia' ? 'text-slate-100 bg-gray-900 px-3 py-2 rounded-md text-center' : 'text-slate-600'} text-xl block mt-2 hover:text-slate-600`}>Materias</Link>
                     </li>
 
                     <li className="text-center">
-                        <Link to='/dashboard/registrar-estudiante' className={`${urlActual === '/dashboard/registrar-estudiante' ? 'text-slate-100 bg-gray-900 px-3 py-2 rounded-md text-center' : 'text-slate-600'} text-xl block mt-2 hover:text-slate-600`}>Registrar Estudiantes</Link>
+                        <Link to='/dashboard/registrar-estudiante' className={`${urlActual === '/dashboard/registrar-estudiante' ? 'text-slate-100 bg-gray-900 px-3 py-2 rounded-md text-center' : 'text-slate-600'} text-xl block mt-2 hover:text-slate-600`}>Estudiantes</Link>
                     </li>
 
                     <li className="text-center">

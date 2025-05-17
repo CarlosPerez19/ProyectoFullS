@@ -11,8 +11,8 @@ const Password = () => {
     const [mensaje, setMensaje] = useState({})
     const [form, setForm] = useState({
         password:"",
-        newpassword:"",
-        confirmpassword:""
+        newPassword:"",
+        confirmPassword:""
     })
 
     const handleChange = (e) => {
@@ -33,7 +33,7 @@ const Password = () => {
             return
         }
 
-        if (form.newpassword.length < 8)
+        if (form.newPassword.length < 8)
         {
             setMensaje({ respuesta: "El password debe tener mínimo 8 carácteres", tipo: false })
                 setTimeout(() => {
@@ -79,30 +79,30 @@ const Password = () => {
 
             <div>
                 <label
-                    htmlFor='newpassword'
+                    htmlFor='newPassword'
                     className='text-gray-700 uppercase font-bold text-sm'>Nuevo password: </label>
                 <input
-                    id='newpassword'
+                    id='newPassword'
                     type="password"
                     className='border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5'
                     placeholder='**************'
-                    name='newpassword'
-                    value={form.newpassword}
+                    name='newPassword'
+                    value={form.newPassword}
                     onChange={handleChange}
                 />
             </div>
 
             <div>
                 <label
-                    htmlFor='confirmpassword'
+                    htmlFor='confirmPassword'
                     className='text-gray-700 uppercase font-bold text-sm'>Confirmar password: </label>
                 <input
-                    id='confirmpassword'
+                    id='confirmPassword'
                     type="password"
                     className='border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5'
                     placeholder='**************'
-                    name='confirmpassword'
-                    value={form.confirmpassword}
+                    name='confirmPassword'
+                    value={form.confirmPassword}
                     onChange={handleChange}
                 />
             </div>

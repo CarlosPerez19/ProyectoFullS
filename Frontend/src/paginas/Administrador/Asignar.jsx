@@ -1,6 +1,6 @@
 import React from 'react'
-import { Register } from '../componets/Register'
-import { AsingRepresentante } from '../componets/AsignarRepresentante'
+import { Register } from '../../componets/Register'
+import { AsingRepresentante } from '../../componets/AsignarRepresentante'
 
 const AsignarRepresentante = () => {
     return (
