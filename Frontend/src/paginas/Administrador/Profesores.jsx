@@ -1,31 +1,84 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 import { RegisterProfesores } from '../../componets/RegisterProfesores'
-import { ActualizarProfesores } from '../../componets/ActualizarProfesores' // <-- Importa el componente
-
-const profesoresEjemplo = [
-    { id: 1, nombre: 'Carlos', apellido: 'Ramírez', email: 'carlos@mail.com' },
-    { id: 2, nombre: 'Lucía', apellido: 'Martínez', email: 'lucia@mail.com' },
-];
+import { ActualizarProfesores } from '../../componets/ActualizarProfesores'
 
 const Profesores = () => {
     const [mostrarRegistro, setMostrarRegistro] = useState(false);
     const [mostrarEditar, setMostrarEditar] = useState(false);
     const [profesorEditar, setProfesorEditar] = useState(null);
-    const [profesores, setProfesores] = useState(profesoresEjemplo);
+    const [profesores, setProfesores] = useState([]);
+    const [mostrarConfirmar, setMostrarConfirmar] = useState(false);
+    const [profesorEliminar, setProfesorEliminar] = useState(null);
 
+    
+    useEffect(() => {
+        const obtenerProfesores = async () => {
+            try {
+                const url = `${import.meta.env.VITE_BACKEND_URL}/profesores`;
+                const token = localStorage.getItem('token');
+                const { data } = await axios.get(url, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                setProfesores(data);
+            } catch (error) {
+                setProfesores([]);
+            }
+        };
+        obtenerProfesores();
+    }, []);
+
+    
     const handleEditar = (profesor) => {
-        setProfesorEditar(profesor);
+        setProfesorEditar({ ...profesor, id: profesor._id || profesor.id });
         setMostrarEditar(true);
     };
 
-    const handleEliminar = (id) => {
-        setProfesores(profesores.filter(prof => prof.id !== id));
+    
+    const handleEliminar = (profesor) => {
+        setProfesorEliminar(profesor);
+        setMostrarConfirmar(true);
+    };
+
+    
+    const confirmarEliminar = async () => {
+        if (!profesorEliminar || (!profesorEliminar._id && !profesorEliminar.id)) {
+            setMostrarConfirmar(false);
+            setProfesorEliminar(null);
+            return;
+        }
+        try {
+            const profesorId = profesorEliminar._id ? profesorEliminar._id : profesorEliminar.id;
+            const url = `${import.meta.env.VITE_BACKEND_URL}/eliminar-profesor/${profesorId}`;
+            const token = localStorage.getItem('token');
+            await axios.delete(url, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            setProfesores(prev =>
+                prev.filter(prof =>
+                    String(prof._id || prof.id) !== String(profesorId)
+                )
+            );
+        } catch (error) {
+            console.log(error);
+        }
+        setMostrarConfirmar(false);
+        setProfesorEliminar(null);
     };
 
     const closeModal = () => {
         setMostrarRegistro(false);
         setMostrarEditar(false);
         setProfesorEditar(null);
+    };
+
+    const closeConfirmar = () => {
+        setMostrarConfirmar(false);
+        setProfesorEliminar(null);
     };
 
     return (
@@ -43,7 +96,7 @@ const Profesores = () => {
                 </button>
             </div>
 
-            {/* Modal para Registrar */}
+            
             {mostrarRegistro && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
                     <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
@@ -58,18 +111,45 @@ const Profesores = () => {
                 </div>
             )}
 
-            {/* Modal para Editar */}
-            {mostrarEditar && (
+            
+            {mostrarEditar && profesorEditar && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
                     <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
-                        {/* Componente para actualizar profesor */}
-                        <ActualizarProfesores profesor={profesorEditar} onClose={closeModal} />
+                        <ActualizarProfesores 
+                            profesor={profesorEditar} 
+                            id={profesorEditar._id || profesorEditar.id}
+                            onClose={closeModal} 
+                        />
                         <button
                             className="mt-4 bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-600 w-full"
                             onClick={closeModal}
                         >
                             Cerrar
                         </button>
+                    </div>
+                </div>
+            )}
+
+            
+            {mostrarConfirmar && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
+                    <div className="bg-white p-6 rounded shadow-lg w-full max-w-sm text-center">
+                        <h2 className="text-xl font-bold mb-4">¿Estás seguro de eliminar este profesor?</h2>
+                        <p className="mb-4">{profesorEliminar?.nombre} {profesorEliminar?.apellido}</p>
+                        <div className="flex justify-center gap-4">
+                            <button
+                                className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-800"
+                                onClick={confirmarEliminar}
+                            >
+                                Eliminar
+                            </button>
+                            <button
+                                className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-600"
+                                onClick={closeConfirmar}
+                            >
+                                Cancelar
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}
@@ -86,7 +166,7 @@ const Profesores = () => {
                     </thead>
                     <tbody>
                         {profesores.map(prof => (
-                            <tr key={prof.id}>
+                            <tr key={prof._id || prof.id}>
                                 <td className="py-2 px-4 border-b text-center">{prof.nombre}</td>
                                 <td className="py-2 px-4 border-b text-center">{prof.apellido}</td>
                                 <td className="py-2 px-4 border-b text-center">{prof.email}</td>
@@ -100,7 +180,7 @@ const Profesores = () => {
                                         </button>
                                         <button
                                             className="bg-red-600 text-white px-2 py-1 rounded hover:bg-red-800"
-                                            onClick={() => handleEliminar(prof.id)}
+                                            onClick={() => handleEliminar(prof)}
                                         >
                                             Eliminar
                                         </button>

@@ -45,7 +45,7 @@ export const RegisterCursos = () => {
                     {Object.keys(mensaje).length > 0 && <Mensaje tipo={mensaje.tipo}>{mensaje.respuesta}</Mensaje>}
               
                     <form onSubmit={handleSubmit}>
-                        {/* Combobox para Nivel */}
+                       
                         <div>
                             <label className="text-gray-700 uppercase font-bold text-sm" htmlFor="nivel">Nivel:</label>
                             <select
@@ -63,7 +63,7 @@ export const RegisterCursos = () => {
                             </select>
                         </div>
 
-                        {/* Combobox para Paralelo */}
+                       
                         <div>
                             <label className="text-gray-700 uppercase font-bold text-sm" htmlFor="paralelo">Paralelo:</label>
                             <select

@@ -1,26 +1,39 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios';
 import Mensaje from '../componets/Alertas/Mensajes'
 
-export const ActualizarAdministrador = () => {
-
-
-    // paso 1 
+export const ActualizarAdministrador = ({ admin, onClose }) => {
+    
+    const [adminId, setAdminId] = useState(null);
     const [form, setform] = useState({
         nombre: "",
         apellido: "",
         email: "",
-        password:""
+        telefono: "",
+        direccion: "",
+        cedula: ""
     })
-    
-    // paso 2
+
+    useEffect(() => {
+        if (admin) {
+            setAdminId(admin.id || admin._id); 
+            setform({
+                nombre: admin.nombre || "",
+                apellido: admin.apellido || "",
+                email: admin.email || "",
+                telefono: admin.telefono || "",
+                direccion: admin.direccion || "",
+                cedula: admin.cedula || ""
+            })
+        }
+    }, [admin])
+
     const handleChange = (e) => {
-        setform({...form,
-            [e.target.name]:e.target.value
+        setform({
+            ...form,
+            [e.target.name]: e.target.value
         })
     }
-
-    // paso 3
 
     const [mensaje, setMensaje] = useState({})
 
@@ -28,31 +41,27 @@ export const ActualizarAdministrador = () => {
         e.preventDefault();
 
         try {
-            const url =  `${import.meta.env.VITE_BACKEND_URL}/registro`;
-            const token = localStorage.getItem('token'); 
-            const respuesta = await axios.post(url, form, {
-              headers: {
-                'Authorization': `Bearer ${token}` 
-              }
+            
+            const url = `${import.meta.env.VITE_BACKEND_URL}/modificar-administrador/${adminId}`;
+            const token = localStorage.getItem('token');
+            const respuesta = await axios.patch(url, form, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
             });
-            
-            setMensaje({ respuesta: respuesta.data.msg, tipo: true }); 
-            setform({})
-            
-          } catch (error) {
-            
-            setMensaje({ respuesta: error.response.data.error, tipo: false }); 
+
+            setMensaje({ respuesta: respuesta.data.msg, tipo: true });
+        } catch (error) {
+            setMensaje({ respuesta: error.response?.data?.error || "Error al actualizar", tipo: false });
         }
-      };
+    };
 
-
-      return (
+    return (
         <>
             <div>
-
                 <div>
-                    {Object.keys(mensaje).length>0 && <Mensaje tipo={mensaje.tipo}>{mensaje.respuesta}</Mensaje>}
-              
+                    {Object.keys(mensaje).length > 0 && <Mensaje tipo={mensaje.tipo}>{mensaje.respuesta}</Mensaje>}
+
                     <form onSubmit={handleSubmit}>
                         <div>
                             <label className="text-gray-700 uppercase font-bold text-sm" htmlFor="nombre">Nombre:</label>
@@ -75,24 +84,35 @@ export const ActualizarAdministrador = () => {
                                 placeholder="Ingresa tu email" className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5" required />
                         </div>
 
-                        
                         <div >
-                            <label className="text-gray-700 uppercase font-bold text-sm" htmlFor="email">Contraseña:</label>
-                            <input type="password" id="password" name='password'
-                                value={form.password || ""} onChange={handleChange}
-                                placeholder="Ingresa tu email" className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5" required />
+                            <label className="text-gray-700 uppercase font-bold text-sm" htmlFor="telefono">Telefono:</label>
+                            <input type="text" id="telefono" name='telefono'
+                                value={form.telefono || ""} onChange={handleChange}
+                                placeholder="Ingresa tu telefono" className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5" required />
+                        </div>
+
+                        <div >
+                            <label className="text-gray-700 uppercase font-bold text-sm" htmlFor="direccion">Direccion:</label>
+                            <input type="text" id="direccion" name='direccion'
+                                value={form.direccion || ""} onChange={handleChange}
+                                placeholder="Ingresa tu direccion" className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5" required />
+                        </div>
+
+                        <div >
+                            <label className="text-gray-700 uppercase font-bold text-sm" htmlFor="cedula">Cedula:</label>
+                            <input type="text" id="cedula" name='cedula'
+                                value={form.cedula || ""} onChange={handleChange}
+                                placeholder="Ingresa tu cedula" className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5" required />
                         </div>
 
                         <div>
-                            <button className=" bg-gray-600 w-full p-3 text-slate-300 uppercase font-bold rounded-lg hover:bg-gray-900 cursor-pointer transition-al mt-4">Registrar</button>
+                            <button className=" bg-gray-600 w-full p-3 text-slate-300 uppercase font-bold rounded-lg hover:bg-gray-900 cursor-pointer transition-al mt-4">
+                                Actualizar
+                            </button>
                         </div>
-
                     </form>
-
                 </div>
-
             </div>
-
         </>
     )
 }

@@ -10,7 +10,9 @@ export const Register = () => {
         nombre: "",
         apellido: "",
         email: "",
-        password:""
+        telefono: "",
+        direccion: "",
+        cedula: ""
     })
     
     // paso 2
@@ -54,7 +56,7 @@ export const Register = () => {
                     {Object.keys(mensaje).length>0 && <Mensaje tipo={mensaje.tipo}>{mensaje.respuesta}</Mensaje>}
               
                     <form onSubmit={handleSubmit}>
-                        <div>
+                      <div>
                             <label className="text-gray-700 uppercase font-bold text-sm" htmlFor="nombre">Nombre:</label>
                             <input type="text" id="nombre" name='nombre'
                                 value={form.nombre || ""} onChange={handleChange}
@@ -75,12 +77,27 @@ export const Register = () => {
                                 placeholder="Ingresa tu email" className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5" required />
                         </div>
 
+                        <div >
+                            <label className="text-gray-700 uppercase font-bold text-sm" htmlFor="apellido">Telefono:</label>
+                            <input type="text" id="telefono" name='telefono'
+                                value={form.telefono || ""} onChange={handleChange}
+                                placeholder="Ingresa tu telefono" className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5" required />
+                        </div>
+
                         
                         <div >
-                            <label className="text-gray-700 uppercase font-bold text-sm" htmlFor="email">Contraseña:</label>
-                            <input type="password" id="password" name='password'
-                                value={form.password || ""} onChange={handleChange}
-                                placeholder="Ingresa tu email" className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5" required />
+                            <label className="text-gray-700 uppercase font-bold text-sm" htmlFor="apellido">Direccion:</label>
+                            <input type="text" id="direccion" name='direccion'
+                                value={form.direccion || ""} onChange={handleChange}
+                                placeholder="Ingresa tu direccion" className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5" required />
+                        </div>
+
+                        
+                        <div >
+                            <label className="text-gray-700 uppercase font-bold text-sm" htmlFor="apellido">Cedula:</label>
+                            <input type="text" id="cedula" name='cedula'
+                                value={form.cedula || ""} onChange={handleChange}
+                                placeholder="Ingresa tu cedula" className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5" required />
                         </div>
 
                         <div>

@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Mensaje from './Alertas/Mensajes';
 
-export const RegisterAsistencias = () => {
+export const AnioLectivo = () => {
     const [form, setform] = useState({
-        curso: "",
-        asistencias: {}
+        
+        terminarAnioLectivo: "",
+
     });
 
     const [mensaje, setMensaje] = useState({});

@@ -1,25 +1,101 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { RegisterMaterias } from '../../componets/RegisterMaterias'
-import { ActualizarMaterias } from '../../componets/ActualizarMaterias';
-
-const materiasEjemplo = [
-    { id: 1, nombre: 'Matemáticas', codigo: 'MAT101' },
-    { id: 2, nombre: 'Lengua', codigo: 'LEN102' },
-];
+import { ActualizarMaterias } from '../../componets/ActualizarMaterias'
+import Mensaje from '../../componets/Alertas/Mensajes'
+import axios from 'axios'
 
 const RegistrarMateria = () => {
     const [mostrarRegistro, setMostrarRegistro] = useState(false);
     const [mostrarEditar, setMostrarEditar] = useState(false);
     const [materiaEditar, setMateriaEditar] = useState(null);
-    const [materias, setMaterias] = useState(materiasEjemplo);
+    const [materias, setMaterias] = useState([]);
+    const [cursos, setCursos] = useState([]);
+    const [cursoSeleccionado, setCursoSeleccionado] = useState('');
+    const [mensaje, setMensaje] = useState({});
+    const [mostrarConfirmar, setMostrarConfirmar] = useState(false);
+    const [materiaEliminar, setMateriaEliminar] = useState(null);
+
+    
+    useEffect(() => {
+        const obtenerCursos = async () => {
+            try {
+                const url = `${import.meta.env.VITE_BACKEND_URL}/cursos`;
+                const token = localStorage.getItem('token');
+                const { data } = await axios.get(url, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                setCursos(data);
+            } catch (error) {
+                setCursos([]);
+            }
+        };
+        obtenerCursos();
+    }, []);
+
+    
+    useEffect(() => {
+        const obtenerMaterias = async () => {
+            if (!cursoSeleccionado) {
+                setMaterias([]);
+                return;
+            }
+            try {
+                const url = `${import.meta.env.VITE_BACKEND_URL}/materias/${cursoSeleccionado}`;
+                const token = localStorage.getItem('token');
+                const { data } = await axios.get(url, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                setMaterias(data);
+            } catch (error) {
+                setMaterias([]);
+            }
+
+            console.log(cursoSeleccionado)
+        };
+        obtenerMaterias();
+    }, [cursoSeleccionado]);
 
     const handleEditar = (materia) => {
         setMateriaEditar(materia);
         setMostrarEditar(true);
     };
 
-    const handleEliminar = (id) => {
-        setMaterias(materias.filter(mat => mat.id !== id));
+    
+    const handleEliminar = (materia) => {
+        setMateriaEliminar(materia);
+        setMostrarConfirmar(true);
+    };
+
+    
+    const confirmarEliminar = async () => {
+        if (!materiaEliminar || (!materiaEliminar._id && !materiaEliminar.id)) {
+            setMostrarConfirmar(false);
+            setMateriaEliminar(null);
+            return;
+        }
+        try {
+            const materiaId = materiaEliminar._id ? materiaEliminar._id : materiaEliminar.id;
+            const url = `${import.meta.env.VITE_BACKEND_URL}/eliminar-materia/${materiaId}`;
+            const token = localStorage.getItem('token');
+            await axios.delete(url, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            setMaterias(materias.filter(mat => String(mat._id || mat.id) !== String(materiaId)));
+            setMensaje({ respuesta: "Materia eliminada correctamente.", tipo: true });
+        } catch (error) {
+            setMensaje({ 
+                respuesta: error.response?.data?.error || error.response?.data?.msg || "Error al eliminar la materia.", 
+                tipo: false 
+            });
+        }
+        setMostrarConfirmar(false);
+        setMateriaEliminar(null);
     };
 
     const closeModal = () => {
@@ -28,22 +104,43 @@ const RegistrarMateria = () => {
         setMateriaEditar(null);
     };
 
+    const closeConfirmar = () => {
+        setMostrarConfirmar(false);
+        setMateriaEliminar(null);
+    };
+
     return (
         <div>
             <h1 className='font-black text-4xl text-gray-500 text-center'>Registrar Materias</h1>
             <hr className='my-4' />
             <p className='mb-8 text-center'>Este módulo te permite registrar una materia</p>
             
+           
+            {Object.keys(mensaje).length > 0 && <Mensaje tipo={mensaje.tipo}>{mensaje.respuesta}</Mensaje>}
+
+            
             <div className="flex justify-center mb-8">
+                <select
+                    className="border-2 p-2 rounded-md"
+                    value={cursoSeleccionado}
+                    onChange={e => setCursoSeleccionado(e.target.value)}
+                >
+                    <option value="">Seleccione un curso</option>
+                    {cursos.map(curso => (
+                        <option key={curso._id || curso.id} value={curso._id || curso.id}>
+                            {`Nivel ${curso.nivel} - Paralelo ${curso.paralelo}`}
+                        </option>
+                    ))}
+                </select>
                 <button
-                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-800"
+                    className="ml-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-800"
                     onClick={() => setMostrarRegistro(true)}
                 >
                     Registrar Materia
                 </button>
             </div>
 
-            {/* Modal para Registrar */}
+            
             {mostrarRegistro && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
                     <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
@@ -58,12 +155,11 @@ const RegistrarMateria = () => {
                 </div>
             )}
 
-            {/* Modal para Editar */}
-             {mostrarEditar && (
+            
+            {mostrarEditar && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
                     <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
-                        {/* Componente para actualizar profesor */}
-                        <ActualizarMaterias profesor={materiaEditar} onClose={closeModal} />
+                        <ActualizarMaterias materia={materiaEditar} onClose={closeModal} />
                         <button
                             className="mt-4 bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-600 w-full"
                             onClick={closeModal}
@@ -74,20 +170,46 @@ const RegistrarMateria = () => {
                 </div>
             )}
 
+            
+            {mostrarConfirmar && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
+                    <div className="bg-white p-6 rounded shadow-lg w-full max-w-sm text-center">
+                        <h2 className="text-xl font-bold mb-4">¿Estás seguro de eliminar esta materia?</h2>
+                        <p className="mb-4">{materiaEliminar?.nombre}</p>
+                        <div className="flex justify-center gap-4">
+                            <button
+                                className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-800"
+                                onClick={confirmarEliminar}
+                            >
+                                Eliminar
+                            </button>
+                            <button
+                                className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-600"
+                                onClick={closeConfirmar}
+                            >
+                                Cancelar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             <div className="overflow-x-auto">
                 <table className="min-w-full bg-white border border-gray-300">
                     <thead>
                         <tr>
-                            <th className="py-2 px-4 border-b">Nombre</th>
-                            <th className="py-2 px-4 border-b">Código</th>
+                            <th className="py-2 px-4 border-b">Nombre Materia</th>
+                            <th className="py-2 px-4 border-b">Profesor</th>
                             <th className="py-2 px-4 border-b">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         {materias.map(mat => (
-                            <tr key={mat.id}>
+                            <tr key={mat._id || mat.id}>
                                 <td className="py-2 px-4 border-b text-center">{mat.nombre}</td>
-                                <td className="py-2 px-4 border-b text-center">{mat.codigo}</td>
+                                <td className="py-2 px-4 border-b text-center">
+                                    {mat.profesor ? `${mat.profesor.nombre} ${mat.profesor.apellido}` : '-'}
+                                </td>
                                 <td className="py-2 px-4 border-b text-center">
                                     <button
                                         className="bg-yellow-400 text-white px-2 py-1 rounded mr-2 hover:bg-yellow-600"
@@ -97,7 +219,7 @@ const RegistrarMateria = () => {
                                     </button>
                                     <button
                                         className="bg-red-600 text-white px-2 py-1 rounded hover:bg-red-800"
-                                        onClick={() => handleEliminar(mat.id)}
+                                        onClick={() => handleEliminar(mat)}
                                     >
                                         Eliminar
                                     </button>
@@ -106,7 +228,7 @@ const RegistrarMateria = () => {
                         ))}
                         {materias.length === 0 && (
                             <tr>
-                                <td colSpan="3" className="text-center py-4">No hay materias registradas.</td>
+                                <td colSpan="3" className="text-center py-4">No hay materias registradas para este curso.</td>
                             </tr>
                         )}
                     </tbody>

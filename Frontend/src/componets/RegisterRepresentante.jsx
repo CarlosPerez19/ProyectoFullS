@@ -10,6 +10,7 @@ export const RegisterRepresentante = () => {
         nombre: "",
         apellido: "",
         email: "",
+        direccion:"",
         telefono:"",
         cedula:""
     })
@@ -72,6 +73,13 @@ export const RegisterRepresentante = () => {
                             <input type="email" id="email" name='email'
                                 value={form.email || ""} onChange={handleChange}
                                 placeholder="Ingresa tu email" className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5" required />
+                        </div>
+
+                         <div >
+                            <label className="text-gray-700 uppercase font-bold text-sm" htmlFor="email">Direccion:</label>
+                            <input type="text" id="direccion" name='direccion'
+                                value={form.direccion || ""} onChange={handleChange}
+                                placeholder="Ingresa tu dirección" className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5" required />
                         </div>
 
                         <div >

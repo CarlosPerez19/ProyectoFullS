@@ -19,7 +19,6 @@ import Profesores from './paginas/Administrador/Profesores'
 import Representante from './paginas/Administrador/Representante'
 import Materias from './paginas/Administrador/Materias'
 import Estudiante from './paginas/Administrador/Estudiante'
-import Asignar from './paginas/Administrador/Asignar'
 import RegistrarAsistencia from './paginas/RegistrarAsistencia'
 import JustificarInasistencia from './paginas/Administrador/JustificarInasistencia'
 import RegistrarCurso from './paginas/Administrador/RegistrarCurso'
@@ -56,7 +55,6 @@ function App() {
                   <Route path='registrar-representante' element={<Representante />} />
                   <Route path='registrar-materia' element={<Materias />} />
                   <Route path='registrar-estudiante' element={<Estudiante />} />
-                  <Route path='asignar-representante' element={<Asignar />} />
                   <Route path='registro-asistencia' element={<RegistrarAsistencia />} />
                   <Route path='justificar-inasistencia' element={<JustificarInasistencia />} />
                   <Route path='registrar-curso' element={<RegistrarCurso />} />

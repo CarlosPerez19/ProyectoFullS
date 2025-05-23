@@ -11,14 +11,8 @@ export const RegisterMaterias = () => {
     })
 
     const [cursos, setCursos] = useState([]) 
+    const [profesores, setProfesores] = useState([])
     const [mensaje, setMensaje] = useState({}) 
-    // paso 2
-    const handleChange = (e) => {
-        setform({
-            ...form,
-            [e.target.name]: e.target.value
-        })
-    }
 
     
     useEffect(() => {
@@ -34,17 +28,48 @@ export const RegisterMaterias = () => {
                 setCursos(respuesta.data) 
             } catch (error) {
                 console.error("Error al obtener los cursos:", error)
-                toast.error("No se pudieron cargar los cursos.")
             }
         }
         obtenerCursos()
     }, [])
 
+    
+    useEffect(() => {
+        const obtenerProfesores = async () => {
+            try {
+                const url = `${import.meta.env.VITE_BACKEND_URL}/profesores`
+                const token = localStorage.getItem('token'); 
+                const respuesta = await axios.get(url, {
+                    headers: {
+                        'Authorization': `Bearer ${token}` 
+                    }
+                });
+                setProfesores(respuesta.data) 
+            } catch (error) {
+                console.error("Error al obtener los profesores:", error)
+            }
+        }
+        obtenerProfesores()
+    }, [])
+
+    const handleChange = (e) => {
+        setform({
+            ...form,
+            [e.target.name]: e.target.value
+        })
+    }
+
+    const handleProfesorChange = (e) => {
+        setform({
+            ...form,
+            cedulaProfesor: e.target.value
+        })
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            console.log(form) 
             const url = `${import.meta.env.VITE_BACKEND_URL}/registro-materia`;
             const token = localStorage.getItem('token');
             const respuesta = await axios.post(url, form, {
@@ -55,8 +80,24 @@ export const RegisterMaterias = () => {
             setMensaje({ respuesta: respuesta.data.msg, tipo: true });
             setform({ curso: '', nombre: '', cedulaProfesor: '' }); 
         } catch (error) {
-            setMensaje({ respuesta: error.response?.data?.msg || "Error al registrar la materia", tipo: false });
+            setMensaje({ respuesta: error.response?.data?.error || "Error al registrar la materia", tipo: false });
         }
+
+    };
+
+    
+    const [profPage, setProfPage] = useState(0);
+    const profsPerPage = 5;
+    const totalPages = Math.ceil(profesores.length / profsPerPage);
+
+    const profesoresToShow = profesores.slice(profPage * profsPerPage, (profPage + 1) * profsPerPage);
+
+    const handlePrev = () => {
+        if (profPage > 0) setProfPage(profPage - 1);
+    };
+
+    const handleNext = () => {
+        if (profPage < totalPages - 1) setProfPage(profPage + 1);
     };
 
     return (
@@ -65,9 +106,8 @@ export const RegisterMaterias = () => {
                 <div>
                     {Object.keys(mensaje).length > 0 && <Mensaje tipo={mensaje.tipo}>{mensaje.respuesta}</Mensaje>}
 
-
                     <form onSubmit={handleSubmit}>
-                        {/* Combobox para Curso */}
+                        
                         <div>
                             <label className="text-gray-700 uppercase font-bold text-sm" htmlFor="curso">Curso:</label>
                             <select
@@ -102,17 +142,53 @@ export const RegisterMaterias = () => {
                         </div>
 
                         <div>
-                            <label className="text-gray-700 uppercase font-bold text-sm" htmlFor="cedulaProfesor">Cédula Profesor:</label>
-                            <input
-                                type="text"
-                                id="cedulaProfesor"
-                                name="cedulaProfesor"
-                                value={form.cedulaProfesor || ""}
-                                onChange={handleChange}
-                                placeholder="Ingresa la cédula del profesor asignado a la materia"
-                                className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5"
-                                required
-                            />
+                            <label className="text-gray-700 uppercase font-bold text-sm">Profesor:</label>
+                            <div className="border-2 w-full p-2 mt-2 rounded-md mb-5 max-h-40 overflow-y-auto">
+                                {profesores.length === 0 && (
+                                    <div className="text-gray-500">No hay profesores registrados.</div>
+                                )}
+                                {profesoresToShow.map((prof) => (
+                                    <div key={prof.cedula} className="flex items-center mb-1">
+                                        <input
+                                            type="radio"
+                                            id={`profesor-${prof.cedula}`}
+                                            name="cedulaProfesor"
+                                            value={prof.cedula}
+                                            checked={form.cedulaProfesor === prof.cedula}
+                                            onChange={handleProfesorChange}
+                                            className="mr-2"
+                                            required
+                                        />
+                                        <label htmlFor={`profesor-${prof.cedula}`}>
+                                            {prof.nombre} {prof.apellido} - {prof.cedula}
+                                        </label>
+                                    </div>
+                                ))}
+                                
+                                {profesores.length > profsPerPage && (
+                                    <div className="flex justify-between mt-2">
+                                        <button
+                                            type="button"
+                                            className="px-2 py-1 bg-gray-300 rounded disabled:opacity-50"
+                                            onClick={handlePrev}
+                                            disabled={profPage === 0}
+                                        >
+                                            Anterior
+                                        </button>
+                                        <span className="text-sm text-gray-600">
+                                            Página {profPage + 1} de {totalPages}
+                                        </span>
+                                        <button
+                                            type="button"
+                                            className="px-2 py-1 bg-gray-300 rounded disabled:opacity-50"
+                                            onClick={handleNext}
+                                            disabled={profPage === totalPages - 1}
+                                        >
+                                            Siguiente
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
                         </div>
 
                         <div>
