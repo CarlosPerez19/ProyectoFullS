@@ -2,7 +2,7 @@ import { useState } from 'react'
 import axios from 'axios'
 import Mensaje from './Alertas/Mensajes'
 
-export const FechaAnio = () => {
+export const FechaAnio = ({ formato = "YYYY-MM-DD", onFechaFinRegistrada }) => {
     const [fechaFin, setFechaFin] = useState('');
     const [mensaje, setMensaje] = useState({});
 
@@ -12,11 +12,14 @@ export const FechaAnio = () => {
             setMensaje({ respuesta: "Debe seleccionar una fecha de finalización.", tipo: false });
             return;
         }
+        // Enviar la fecha tal como la entrega el input: YYYY-MM-DD
+        const fechaFormateada = fechaFin;
+        console.log('Fecha enviada al backend:', fechaFormateada);
+
         try {
             const url = `${import.meta.env.VITE_BACKEND_URL}/fecha-fin-periodo`;
             const token = localStorage.getItem('token');
-            // El backend espera el formato YYYY-mm-dd, que es el que da el input type="date"
-            const body = { fechaFin };
+            const body = { fechaFin: fechaFormateada };
             await axios.patch(url, body, {
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -24,6 +27,7 @@ export const FechaAnio = () => {
             });
             setMensaje({ respuesta: "Fecha de finalización registrada correctamente.", tipo: true });
             setFechaFin('');
+            if (onFechaFinRegistrada) onFechaFinRegistrada();
         } catch (error) {
             setMensaje({ respuesta: error.response?.data?.error || "Error al registrar la fecha.", tipo: false });
         }

@@ -8,7 +8,7 @@ const RegistrarAsistencia = () => {
     const [mensaje, setMensaje] = useState({});
     const [mostrarFechaFin, setMostrarFechaFin] = useState(false);
     const [mostrarPonderaciones, setMostrarPonderaciones] = useState(false);
-    const [mostrarTerminarPeriodo, setMostrarTerminarPeriodo] = useState(false);
+    const [mostrarModal, setMostrarModal] = useState(false);
 
     const handleIniciarPeriodo = async () => {
         try {
@@ -33,7 +33,6 @@ const RegistrarAsistencia = () => {
 
     const handlePonderacionesAsignadas = () => {
         setMostrarPonderaciones(false);
-        setMostrarTerminarPeriodo(true);
     };
 
     const handleTerminarPeriodo = async () => {
@@ -46,9 +45,10 @@ const RegistrarAsistencia = () => {
                 }
             });
             setMensaje({ respuesta: data.msg || "Año lectivo finalizado correctamente.", tipo: true });
-            setMostrarTerminarPeriodo(false);
+            setMostrarModal(false);
         } catch (error) {
             setMensaje({ respuesta: error.response?.data?.error || "Error al finalizar el año lectivo.", tipo: false });
+            setMostrarModal(false);
         }
     };
 
@@ -61,18 +61,55 @@ const RegistrarAsistencia = () => {
                 <Mensaje tipo={mensaje.tipo}>{mensaje.respuesta}</Mensaje>
             )}
 
-            {!mostrarFechaFin && !mostrarPonderaciones && !mostrarTerminarPeriodo && (
+            {/* Botón Iniciar Año Lectivo */}
+            {!mostrarFechaFin && !mostrarPonderaciones && (
+                <div className="mb-6">
+                    <button
+                        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-800"
+                        onClick={handleIniciarPeriodo}
+                    >
+                        Iniciar Año Lectivo
+                    </button>
+                </div>
+            )}
+
+            {/* Botón Finalizar Año Lectivo siempre visible y separado */}
+            <div className="mb-6">
                 <button
-                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-800 mb-6"
-                    onClick={handleIniciarPeriodo}
+                    className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-800"
+                    onClick={() => setMostrarModal(true)}
                 >
-                    Iniciar Año Lectivo
+                    Finalizar Año Lectivo
                 </button>
+            </div>
+
+            {/* Modal de confirmación */}
+            {mostrarModal && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
+                    <div className="bg-white p-6 rounded shadow-lg w-80">
+                        <h2 className="text-lg font-bold mb-4 text-center">¿Está seguro que desea finalizar el año lectivo?</h2>
+                        <div className="flex justify-between">
+                            <button
+                                className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-600"
+                                onClick={() => setMostrarModal(false)}
+                            >
+                                Cancelar
+                            </button>
+                            <button
+                                className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-800"
+                                onClick={handleTerminarPeriodo}
+                            >
+                                Confirmar
+                            </button>
+                        </div>
+                    </div>
+                </div>
             )}
 
             {mostrarFechaFin && (
                 <FechaAnio
                     onFechaFinRegistrada={handleFechaFinRegistrada}
+                    formato="YYYY-MM-DD"
                 />
             )}
 
@@ -80,15 +117,6 @@ const RegistrarAsistencia = () => {
                 <AsignarPonderaciones
                     onPonderacionesAsignadas={handlePonderacionesAsignadas}
                 />
-            )}
-
-            {mostrarTerminarPeriodo && (
-                <button
-                    className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-800 mt-6"
-                    onClick={handleTerminarPeriodo}
-                >
-                    Finalizar Año Lectivo
-                </button>
             )}
         </div>
     )

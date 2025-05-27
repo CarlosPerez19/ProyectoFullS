@@ -44,7 +44,7 @@ function App() {
           </Route>
 
           <Route path='dashboard/*' element={
-            <PrivateRoute>
+            <PrivateRoute allowedRoles={['administrador']}>
               <Routes>
                 <Route element={<Dashboard />}>
                   <Route index element={<Perfil />} />
@@ -65,7 +65,7 @@ function App() {
           } />
 
           <Route path='profesor-dashboard/*' element={
-            <PrivateRoute>
+            <PrivateRoute allowedRoles={['profesor']}>
               <Routes>
                 <Route element={<ProfesoresDashboard />}>
                   <Route index element={<Perfil />} />

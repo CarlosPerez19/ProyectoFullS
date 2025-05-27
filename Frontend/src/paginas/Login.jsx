@@ -54,6 +54,7 @@ const Login = () => {
             console.log("Datos enviados:", form) 
             const respuesta = await axios.post(url, form)
             localStorage.setItem('token', respuesta.data.token)
+            localStorage.setItem('rol', respuesta.data.rol)
 
             const perfilUrl = `${import.meta.env.VITE_BACKEND_URL}/perfil`
             const perfilRespuesta = await axios.get(perfilUrl, {
@@ -63,6 +64,7 @@ const Login = () => {
             })
 
             setAuth(perfilRespuesta.data)
+            console.log(respuesta.data)
             console.log(perfilRespuesta.data)
 
   
