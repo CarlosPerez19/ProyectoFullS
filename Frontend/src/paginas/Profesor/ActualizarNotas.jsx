@@ -87,36 +87,34 @@ export const ActualizarNotas = () => {
         fetchTipos();
     }, [materiaSeleccionada, tipo]);
 
-    // Traer estudiantes y notas existentes usando el endpoint /descripcion/:materiaId/:tipo enviando el subtipo en el body (POST)
     useEffect(() => {
-        const fetchNotasYEstudiantes = async () => {
-            if (!materiaSeleccionada || !tipo || !tipoSeleccionado) {
-                setEstudiantes([]);
-                setNotas({});
-                return;
-            }
-            try {
-                const url = `${import.meta.env.VITE_BACKEND_URL}/descripcion/${materiaSeleccionada}/${tipo}`;
-                const token = localStorage.getItem('token');
-                const respuesta = await axios.post(
-                    url,
-                    { descripcion: tipoSeleccionado },
-                    { headers: { 'Authorization': `Bearer ${token}` } }
-                );
-                // El backend devuelve { estudiantes: [{id, nombre, apellido, cedula, nota}, ...] }
-                const estudiantesResp = Array.isArray(respuesta.data.estudiantes) ? respuesta.data.estudiantes : [];
-                setEstudiantes(estudiantesResp);
-                const notasMap = {};
-                estudiantesResp.forEach(est => {
-                    notasMap[est.id] = est.nota;
-                });
-                setNotas(notasMap);
-            } catch (error) {
-                setEstudiantes([]);
-                setNotas({});
-            }
-        };
-        fetchNotasYEstudiantes();
+    const fetchNotasYEstudiantes = async () => {
+        if (!materiaSeleccionada || !tipo || !tipoSeleccionado) {
+            setEstudiantes([]);
+            setNotas({});
+            return;
+        }
+        try {
+            const url = `${import.meta.env.VITE_BACKEND_URL}/descripcion/${materiaSeleccionada}/${tipo}`;
+            const token = localStorage.getItem('token');
+            const respuesta = await axios.post(
+                url,
+                { descripcion: tipoSeleccionado },
+                { headers: { 'Authorization': `Bearer ${token}` } }
+            );
+            const estudiantesResp = Array.isArray(respuesta.data.estudiantes) ? respuesta.data.estudiantes : [];
+            setEstudiantes(estudiantesResp);
+            const notasMap = {};
+            estudiantesResp.forEach(est => {
+                notasMap[est.id] = est.nota;
+            });
+            setNotas(notasMap);
+        } catch (error) {
+            setEstudiantes([]);
+            setNotas({});
+        }
+    };
+    fetchNotasYEstudiantes();
     }, [materiaSeleccionada, tipo, tipoSeleccionado]);
 
     const handleNotaChange = (id, value) => {
@@ -131,41 +129,43 @@ export const ActualizarNotas = () => {
     };
 
     const handleActualizarNotas = async () => {
-        if (!tipo || !tipoSeleccionado) {
-            setMensaje({ tipo: false, respuesta: 'Debe seleccionar el tipo y el sub-tipo.' });
-            return;
-        }
-        const notasValidas = estudiantes.every(est => {
-            const nota = notas[est.id];
-            return nota !== undefined && nota !== '' && typeof nota === 'number' && nota >= 1 && nota <= 10;
+    if (!tipo || !tipoSeleccionado) {
+        setMensaje({ tipo: false, respuesta: 'Debe seleccionar el tipo y el sub-tipo.' });
+        return;
+    }
+    const notasValidas = estudiantes.every(est => {
+        const nota = notas[est.id];
+        return nota !== undefined && nota !== '' && typeof nota === 'number' && nota >= 1 && nota <= 10;
+    });
+    if (!notasValidas) {
+        setMensaje({ tipo: false, respuesta: 'Debe ingresar todas las notas entre 1 y 10.' });
+        return;
+    }
+    setEnviando(true);
+    try {
+        const url = `${import.meta.env.VITE_BACKEND_URL}/actualizar-nota/${materiaSeleccionada}`;
+        const token = localStorage.getItem('token');
+
+        const body = {
+            tipo: tipo,
+            descripcion: tipoSeleccionado,
+            notas: notas 
+        };
+
+        console.log('URL:', url);
+        console.log('Body enviado:', body);
+
+        await axios.patch(url, body, {
+            headers: { 'Authorization': `Bearer ${token}` }
         });
-        if (!notasValidas) {
-            setMensaje({ tipo: false, respuesta: 'Debe ingresar todas las notas entre 1 y 10.' });
-            return;
-        }
-        setEnviando(true);
-        try {
-            const url = `${import.meta.env.VITE_BACKEND_URL}/actualizar-nota/${materiaSeleccionada}`;
-            const token = localStorage.getItem('token');
-            const notasNumericas = {};
-            Object.keys(notas).forEach(id => {
-                notasNumericas[id] = Number(notas[id]);
-            });
-            const body = {
-                tipo,
-                tipoDetalle: tipoSeleccionado,
-                notas: notasNumericas
-            };
-            await axios.put(url, body, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            setMensaje({ tipo: true, respuesta: 'Notas actualizadas correctamente.' });
-            setNotas({});
-        } catch (error) {
-            setMensaje({ tipo: false, respuesta: error.response?.data?.error || 'Error al actualizar las notas.' });
-        }
-        setEnviando(false);
-    };
+        setMensaje({ tipo: true, respuesta: 'Notas actualizadas correctamente.' });
+        setNotas({});
+    } catch (error) {
+        setMensaje({ tipo: false, respuesta: error.response?.data?.error || 'Error al actualizar las notas.' });
+        console.error('Error al actualizar notas:', error);
+    }
+    setEnviando(false);
+};
 
     return (
         <div>

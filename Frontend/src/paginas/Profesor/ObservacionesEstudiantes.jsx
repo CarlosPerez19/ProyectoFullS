@@ -1,13 +1,113 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { ObservacionEstudiante } from '../../componets/ObservacionEstudiante'
+import axios from 'axios'
 
 const ObservacionesEstudiantes = () => {
+    const [cursos, setCursos] = useState([]);
+    const [cursoSeleccionado, setCursoSeleccionado] = useState('');
+    const [estudiantes, setEstudiantes] = useState([]);
+    const [estudianteSeleccionado, setEstudianteSeleccionado] = useState(null);
+
+    useEffect(() => {
+        const fetchCursos = async () => {
+            try {
+                const url = `${import.meta.env.VITE_BACKEND_URL}/profesor/cursos`;
+                const token = localStorage.getItem('token');
+                const respuesta = await axios.get(url, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                setCursos(respuesta.data.cursosAsociados || []);
+            } catch (error) {
+                setCursos([]);
+            }
+        };
+        fetchCursos();
+    }, []);
+
+    useEffect(() => {
+        if (!cursoSeleccionado) {
+            setEstudiantes([]);
+            return;
+        }
+        const fetchEstudiantes = async () => {
+            try {
+                const url = `${import.meta.env.VITE_BACKEND_URL}/estudiantes/${cursoSeleccionado}`;
+                const token = localStorage.getItem('token');
+                const respuesta = await axios.get(url, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                setEstudiantes(respuesta.data.estudiantes || []);
+            } catch (error) {
+                setEstudiantes([]);
+            }
+        };
+        fetchEstudiantes();
+    }, [cursoSeleccionado]);
+
     return (
         <div>
             <h1 className='font-black text-4xl text-gray-500'>Observaciones</h1>
             <hr className='my-4' />
             <p className='mb-8'>Este modulo te permite registrar observaciones de los estudiantes</p>
-            <ObservacionEstudiante />
+            <div className="flex justify-center mb-8">
+                <select
+                    className="border-2 p-2 rounded-md"
+                    value={cursoSeleccionado}
+                    onChange={e => setCursoSeleccionado(e.target.value)}
+                >
+                    <option value="">Seleccione un curso</option>
+                    {cursos.map(curso => (
+                        <option key={curso.id} value={curso.id}>
+                            {curso.nombre}
+                        </option>
+                    ))}
+                </select>
+            </div>
+            <div className="overflow-x-auto">
+                <table className="min-w-full bg-white border border-gray-300">
+                    <thead>
+                        <tr>
+                            <th className="py-2 px-4 border-b text-center">Cédula</th>
+                            <th className="py-2 px-4 border-b text-center">Nombre</th>
+                            <th className="py-2 px-4 border-b text-center">Apellido</th>
+                            <th className="py-2 px-4 border-b text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {estudiantes.map(est => (
+                            <tr key={est._id || est.id}>
+                                <td className="py-1 px-4 border-b text-center">{est.cedula}</td>
+                                <td className="py-1 px-4 border-b text-center">{est.nombre}</td>
+                                <td className="py-1 px-4 border-b text-center">{est.apellido}</td>
+                                <td className="py-1 px-4 border-b text-center">
+                                    <button
+                                        className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-800"
+                                        onClick={() => setEstudianteSeleccionado(est)}
+                                    >
+                                        Registrar Observación
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+            {estudianteSeleccionado && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
+                    <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg relative">
+                        <button
+                            className="absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-2xl"
+                            onClick={() => setEstudianteSeleccionado(null)}
+                        >
+                            &times;
+                        </button>
+                        <ObservacionEstudiante
+                            estudiante={estudianteSeleccionado}
+                            onClose={() => setEstudianteSeleccionado(null)}
+                        />
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
