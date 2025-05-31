@@ -63,7 +63,6 @@ export const ActualizarMaterias = ({ materia, onClose }) => {
         try {
             const url = `${import.meta.env.VITE_BACKEND_URL}/reasignar-materia/${form.idMateria}/${form.idProfesorNuevo}`;
             const token = localStorage.getItem('token');
-            // Enviamos el nombre y el id del nuevo profesor en el body
             await axios.patch(
                 url,
                 {
@@ -80,10 +79,7 @@ export const ActualizarMaterias = ({ materia, onClose }) => {
             if (onClose) setTimeout(onClose, 1200);
         } catch (error) {
             setMensaje({ respuesta: error.response?.data?.error, tipo: false });
-            console.log(error)
         }
-
-        console.log(form);
         
     };
 

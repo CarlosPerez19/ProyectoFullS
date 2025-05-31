@@ -37,7 +37,6 @@ export const Register = () => {
           setMensaje({ respuesta: respuesta.data.msg, tipo: true });
           setform({});
         } catch (error) {
-          console.log(error.response); 
           setMensaje({ respuesta: error.response.data.msg, tipo: false });
         }
       };

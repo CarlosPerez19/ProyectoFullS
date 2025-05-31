@@ -46,7 +46,6 @@ export const RegisterMaterias = () => {
                 });
                 setProfesores(respuesta.data) 
             } catch (error) {
-                console.error("Error al obtener los profesores:", error)
             }
         }
         obtenerProfesores()

@@ -33,7 +33,6 @@ const Login = () => {
                 const respuesta = await axios.get(url)
                 setAniosLectivos(respuesta.data) 
             } catch (error) {
-                console.error("Error al obtener los años lectivos:", error)
                 toast.error("No se pudieron cargar los años lectivos.")
             }
         }
@@ -51,7 +50,6 @@ const Login = () => {
 
         try {
             const url = `${import.meta.env.VITE_BACKEND_URL}/login`
-            console.log("Datos enviados:", form) 
             const respuesta = await axios.post(url, form)
             localStorage.setItem('token', respuesta.data.token)
             localStorage.setItem('rol', respuesta.data.rol)
@@ -64,17 +62,13 @@ const Login = () => {
             })
 
             setAuth(perfilRespuesta.data)
-            console.log(respuesta.data)
-            console.log(perfilRespuesta.data)
 
-  
             if (respuesta.data.rol.includes('profesor')) {
                 navigate('/profesor-dashboard')
             } else {
                 navigate('/dashboard')
             }
         } catch (error) {
-            console.error("Error al iniciar sesión:", error.response?.data || error)
             toast.error(error.response?.data?.error || "Error al iniciar sesión.")
             setform({ email: "", password: "", anioLectivo: "" })
         }

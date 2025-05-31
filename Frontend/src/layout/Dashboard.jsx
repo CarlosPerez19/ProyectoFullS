@@ -10,23 +10,21 @@ const Dashboard = () => {
     const { auth } = useContext(AuthContext)
     const autenticado = localStorage.getItem('token')
 
-    // Paleta solo tonos de verde
     const colores = {
-        sidebar: '#3b8842',        // Verde medio para sidebar
-        sidebarText: '#fff',       // Blanco para textos del sidebar
-        sidebarActive: '#a6ce7d',  // Verde claro para el link activo
-        sidebarActiveText: '#3b8842', // Verde medio para texto activo
-        border: '#a6ce7d',         // Verde claro para bordes y detalles
-        badge: '#a6ce7d',          // Verde claro para el badge de estado
-        mainBg: '#f6fff8',         // Verde muy claro para fondo principal
-        topbar: '#3b8842',         // Verde medio para la barra superior
-        topbarText: '#fff',        // Blanco para texto barra superior
-        salir: '#5a318e',          // Morado para el botón salir (contraste)
-        footer: '#a6ce7d',         // Verde claro para el footer
-        footerText: '#3b8842'      // Verde medio para el texto del footer
+        sidebar: '#3b8842',      
+        sidebarText: '#fff',       
+        sidebarActive: '#a6ce7d', 
+        sidebarActiveText: '#3b8842', 
+        border: '#a6ce7d',         
+        badge: '#a6ce7d',         
+        mainBg: '#f6fff8',        
+        topbar: '#3b8842',         
+        topbarText: '#fff',        
+        salir: '#5a318e',          
+        footer: '#a6ce7d',         
+        footerText: '#3b8842'      
     };
 
-    // Ir al perfil al hacer click en la imagen
     const handlePerfilClick = () => {
         navigate('/dashboard');
     };
@@ -113,12 +111,12 @@ const Dashboard = () => {
                         >Materias</Link>
                     </li>
                     <li className="text-center">
-                        <Link to='/dashboard/registro-asistencia'
+                        <Link to='/dashboard/año-lectivo'
                             className={`text-xl block mt-2 rounded-md text-center px-3 py-2 transition-colors`}
                             style={{
-                                backgroundColor: urlActual === '/dashboard/registro-asistencia' ? colores.sidebarActive : 'transparent',
-                                color: urlActual === '/dashboard/registro-asistencia' ? colores.sidebarActiveText : colores.sidebarText,
-                                fontWeight: urlActual === '/dashboard/registro-asistencia' ? 'bold' : 'normal'
+                                backgroundColor: urlActual === '/dashboard/año-lectivo' ? colores.sidebarActive : 'transparent',
+                                color: urlActual === '/dashboard/año-lectivo' ? colores.sidebarActiveText : colores.sidebarText,
+                                fontWeight: urlActual === '/dashboard/año-lectivo' ? 'bold' : 'normal'
                             }}
                         >Año Lectivo</Link>
                     </li>

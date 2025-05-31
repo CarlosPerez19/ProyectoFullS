@@ -14,20 +14,19 @@ const ProfesoresDashboard = () => {
         navigate('/profesor-dashboard');
     };
 
-    // Paleta solo tonos de verde
     const colores = {
-        sidebar: '#3b8842',        // Verde medio para sidebar
-        sidebarText: '#fff',       // Blanco para textos del sidebar
-        sidebarActive: '#a6ce7d',  // Verde claro para el link activo
-        sidebarActiveText: '#3b8842', // Verde medio para texto activo
-        border: '#a6ce7d',         // Verde claro para bordes y detalles
-        badge: '#a6ce7d',          // Verde claro para el badge de estado
-        mainBg: '#f6fff8',         // Verde muy claro para fondo principal
-        topbar: '#3b8842',         // Verde medio para la barra superior
-        topbarText: '#fff',        // Blanco para texto barra superior
-        salir: '#5a318e',          // Morado para el botón salir (contraste)
-        footer: '#a6ce7d',         // Verde claro para el footer
-        footerText: '#3b8842'      // Verde medio para el texto del footer
+        sidebar: '#3b8842',              
+        sidebarText: '#fff',               
+        sidebarActive: '#a6ce7d',          
+        sidebarActiveText: '#3b8842',      
+        border: '#a6ce7d',                  
+        badge: '#a6ce7d',                   
+        mainBg: '#f6fff8',                  
+        topbar: '#3b8842',              
+        topbarText: '#fff',                
+        salir: '#5a318e',                  
+        footer: '#a6ce7d',                  
+        footerText: '#3b8842'               
     };
 
     return (
@@ -102,19 +101,6 @@ const ProfesoresDashboard = () => {
                             }}
                         >
                             Observaciones
-                        </Link>
-                    </li>
-                    <li className="text-center">
-                        <Link
-                            to='/profesor-dashboard/estudiante-materia'
-                            className={`text-xl block mt-2 rounded-md text-center px-3 py-2 transition-colors`}
-                            style={{
-                                backgroundColor: urlActual === '/profesor-dashboard/estudiante-materia' ? colores.sidebarActive : 'transparent',
-                                color: urlActual === '/profesor-dashboard/estudiante-materia' ? colores.sidebarActiveText : colores.sidebarText,
-                                fontWeight: urlActual === '/profesor-dashboard/estudiante-materia' ? 'bold' : 'normal'
-                            }}
-                        >
-                            Buscar Estudiante
                         </Link>
                     </li>
                 </ul>

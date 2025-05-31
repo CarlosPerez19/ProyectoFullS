@@ -37,7 +37,6 @@ export const AsignarPonderaciones = () => {
             });
         } catch (error) {
             setMensaje({ respuesta: error.response?.data?.error || "Error al asignar ponderaciones.", tipo: false });
-            console.log(error);
         }
     };
 

@@ -89,13 +89,13 @@ export const ActualizarNotas = () => {
 
     useEffect(() => {
     const fetchNotasYEstudiantes = async () => {
-        if (!materiaSeleccionada || !tipo || !tipoSeleccionado) {
+        if (!materiaSeleccionada || !tipo || !tipoSeleccionado || !cursoSeleccionado) {
             setEstudiantes([]);
             setNotas({});
             return;
         }
         try {
-            const url = `${import.meta.env.VITE_BACKEND_URL}/descripcion/${materiaSeleccionada}/${tipo}`;
+            const url = `${import.meta.env.VITE_BACKEND_URL}/descripcion/${cursoSeleccionado}/${materiaSeleccionada}/${tipo}`;
             const token = localStorage.getItem('token');
             const respuesta = await axios.post(
                 url,
@@ -114,8 +114,9 @@ export const ActualizarNotas = () => {
             setNotas({});
         }
     };
+
     fetchNotasYEstudiantes();
-    }, [materiaSeleccionada, tipo, tipoSeleccionado]);
+}, [materiaSeleccionada, tipo, tipoSeleccionado, cursoSeleccionado]);
 
     const handleNotaChange = (id, value) => {
         if (value === '') {

@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { AsignarPonderaciones } from '../componets/AsignarPonderaciones'
-import { FechaAnio } from '../componets/FechaAnio'
+import { AsignarPonderaciones } from '../../componets/AsignarPonderaciones'
+import { FechaAnio } from '../../componets/FechaAnio'
 import axios from 'axios'
-import Mensaje from '../componets/Alertas/Mensajes'
+import Mensaje from '../../componets/Alertas/Mensajes'
 
-const RegistrarAsistencia = () => {
+const AnioLectivo = () => {
     const [mensaje, setMensaje] = useState({});
     const [mostrarFechaFin, setMostrarFechaFin] = useState(false);
     const [mostrarPonderaciones, setMostrarPonderaciones] = useState(false);
@@ -61,29 +61,26 @@ const RegistrarAsistencia = () => {
                 <Mensaje tipo={mensaje.tipo}>{mensaje.respuesta}</Mensaje>
             )}
 
-            {/* Botón Iniciar Año Lectivo */}
+            {/* Tarjeta con los botones uno al lado del otro */}
             {!mostrarFechaFin && !mostrarPonderaciones && (
-                <div className="mb-6">
-                    <button
-                        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-800"
-                        onClick={handleIniciarPeriodo}
-                    >
-                        Iniciar Año Lectivo
-                    </button>
+                <div className="flex justify-center mb-8">
+                    <div className="bg-white shadow-lg rounded-lg p-6 flex gap-4 items-center">
+                        <button
+                            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-800"
+                            onClick={handleIniciarPeriodo}
+                        >
+                            Iniciar Año Lectivo
+                        </button>
+                        <button
+                            className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-800"
+                            onClick={() => setMostrarModal(true)}
+                        >
+                            Finalizar Año Lectivo
+                        </button>
+                    </div>
                 </div>
             )}
 
-            {/* Botón Finalizar Año Lectivo siempre visible y separado */}
-            <div className="mb-6">
-                <button
-                    className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-800"
-                    onClick={() => setMostrarModal(true)}
-                >
-                    Finalizar Año Lectivo
-                </button>
-            </div>
-
-            {/* Modal de confirmación */}
             {mostrarModal && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
                     <div className="bg-white p-6 rounded shadow-lg w-80">
@@ -122,4 +119,4 @@ const RegistrarAsistencia = () => {
     )
 }
 
-export default RegistrarAsistencia
+export default AnioLectivo

@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { ObservacionEstudiante } from '../../componets/ObservacionEstudiante'
 import axios from 'axios'
+import Mensaje from '../../componets/Alertas/Mensajes'
 
 const ObservacionesEstudiantes = () => {
     const [cursos, setCursos] = useState([]);
     const [cursoSeleccionado, setCursoSeleccionado] = useState('');
     const [estudiantes, setEstudiantes] = useState([]);
     const [estudianteSeleccionado, setEstudianteSeleccionado] = useState(null);
+    const [mensaje, setMensaje] = useState({});
 
     useEffect(() => {
         const fetchCursos = async () => {
@@ -17,8 +19,13 @@ const ObservacionesEstudiantes = () => {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 setCursos(respuesta.data.cursosAsociados || []);
+                setMensaje({});
             } catch (error) {
                 setCursos([]);
+                setMensaje({
+                    tipo: false,
+                    respuesta: error.response?.data?.error || "Error al cargar los cursos."
+                });
             }
         };
         fetchCursos();
@@ -37,8 +44,14 @@ const ObservacionesEstudiantes = () => {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 setEstudiantes(respuesta.data.estudiantes || []);
+                setMensaje({});
             } catch (error) {
                 setEstudiantes([]);
+                setMensaje({
+                    tipo: false,
+                    respuesta: error.response?.data?.error || "Error al cargar los estudiantes."
+                    
+                });
             }
         };
         fetchEstudiantes();
@@ -49,6 +62,9 @@ const ObservacionesEstudiantes = () => {
             <h1 className='font-black text-4xl text-gray-500'>Observaciones</h1>
             <hr className='my-4' />
             <p className='mb-8'>Este modulo te permite registrar observaciones de los estudiantes</p>
+            {Object.keys(mensaje).length > 0 && (
+                <Mensaje tipo={mensaje.tipo}>{mensaje.respuesta}</Mensaje>
+            )}
             <div className="flex justify-center mb-8">
                 <select
                     className="border-2 p-2 rounded-md"

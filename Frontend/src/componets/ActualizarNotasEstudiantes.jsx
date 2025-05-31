@@ -47,11 +47,9 @@ export const ActualizarNotasEstudiantes = () => {
                     'Authorization': `Bearer ${token}`
                 }
             });
-            console.log(respuesta.data);
             const materiasDetalle = respuesta.data.materiasAsignadas.flatMap(asignacion => asignacion.materiasDetalle) || [];
             setMaterias(materiasDetalle); 
         } catch (error) {
-            console.error(error);
         }
     };
 

@@ -64,7 +64,6 @@ const Profesores = () => {
                 )
             );
         } catch (error) {
-            console.log(error);
         }
         setMostrarConfirmar(false);
         setProfesorEliminar(null);

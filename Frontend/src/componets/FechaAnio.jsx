@@ -12,9 +12,7 @@ export const FechaAnio = ({ formato = "YYYY-MM-DD", onFechaFinRegistrada }) => {
             setMensaje({ respuesta: "Debe seleccionar una fecha de finalización.", tipo: false });
             return;
         }
-        // Enviar la fecha tal como la entrega el input: YYYY-MM-DD
         const fechaFormateada = fechaFin;
-        console.log('Fecha enviada al backend:', fechaFormateada);
 
         try {
             const url = `${import.meta.env.VITE_BACKEND_URL}/fecha-fin-periodo`;

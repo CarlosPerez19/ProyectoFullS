@@ -66,8 +66,6 @@ const Registrar = () => {
                 )
             );
         } catch (error) {
-            
-            console.log(error);
         }
         setMostrarConfirmar(false);
         setAdminEliminar(null);

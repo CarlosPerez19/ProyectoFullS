@@ -3,7 +3,6 @@ import axios from 'axios';
 import Mensaje from '../componets/Alertas/Mensajes'
 
 export const AsingRepresentante = ({ estudiante }) => {
-    // Inicializa la cédula del estudiante si se recibe por props
     const [form, setform] = useState({
         cedulaEstudiante: estudiante?.cedula || "",
         cedulaRepresentante: ""

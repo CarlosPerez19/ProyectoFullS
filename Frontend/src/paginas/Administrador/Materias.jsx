@@ -53,8 +53,6 @@ const RegistrarMateria = () => {
             } catch (error) {
                 setMaterias([]);
             }
-
-            console.log(cursoSeleccionado)
         };
         obtenerMaterias();
     }, [cursoSeleccionado]);

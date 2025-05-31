@@ -56,7 +56,6 @@ const RegistrarEstudiante = () => {
                 setEstudiantes(data)
             } catch (error) {
                 setEstudiantes([])
-                console.log(error)
             }
         }
         obtenerEstudiantes()

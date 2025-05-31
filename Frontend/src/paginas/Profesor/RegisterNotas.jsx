@@ -1,3 +1,4 @@
+// ...existing imports...
 import { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import Mensaje from '../../componets/Alertas/Mensajes';
@@ -14,6 +15,15 @@ export const RegisterNotas = () => {
     const [mensaje, setMensaje] = useState({});
     const [notas, setNotas] = useState({});
     const [enviando, setEnviando] = useState(false);
+
+    const [imagen, setImagen] = useState(null);
+    const [preview, setPreview] = useState(null);
+    const [mensajeEvidencia, setMensajeEvidencia] = useState({});
+    const [enviandoEvidencia, setEnviandoEvidencia] = useState(false);
+    const [mostrarModalEvidencia, setMostrarModalEvidencia] = useState(false);
+    const [evidenciaSubida, setEvidenciaSubida] = useState(false);
+
+    const [mostrarConfirmar, setMostrarConfirmar] = useState(false);
 
     useEffect(() => {
         const fetchCursos = async () => {
@@ -43,7 +53,6 @@ export const RegisterNotas = () => {
                 const respuesta = await axios.get(url, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
-                // Usar .id para el select de materias
                 const materiasDetalle = respuesta.data.materiasAsignadas
                     ? respuesta.data.materiasAsignadas.flatMap(asignacion => asignacion.materiasDetalle) || []
                     : respuesta.data.materias || [];
@@ -86,25 +95,70 @@ export const RegisterNotas = () => {
         setNotas({ ...notas, [id]: numVal });
     };
 
-    const handleRegistrarNotas = async () => {
-        if (!tipo) {
-            setMensaje({ tipo: false, respuesta: 'Debe seleccionar el tipo de nota.' });
+    const handleImagenChange = (e) => {
+        if (e.target.files && e.target.files[0]) {
+            setImagen(e.target.files[0]);
+            setPreview(URL.createObjectURL(e.target.files[0]));
+        } else {
+            setImagen(null);
+            setPreview(null);
+        }
+    };
+
+    const quitarImagen = () => {
+        setImagen(null);
+        setPreview(null);
+    };
+
+    const handleConfirmarSubida = (e) => {
+        e.preventDefault();
+        if (!materiaSeleccionada || !cursoSeleccionado || !imagen) {
+            setMensajeEvidencia({ tipo: false, respuesta: 'Debe seleccionar curso, materia y cargar una imagen.' });
             return;
         }
-        
-        const notasValidas = estudiantes.every(est => {
-            const nota = notas[est._id];
-            return nota !== undefined && nota !== '' && typeof nota === 'number' && nota >= 1 && nota <= 10;
-        });
-        if (!notasValidas) {
-            setMensaje({ tipo: false, respuesta: 'Debe ingresar todas las notas entre 1 y 10.' });
-            return;
+        setMostrarConfirmar(true);
+    };
+
+    const handleSubirEvidencia = async (e) => {
+        e.preventDefault();
+        setEnviandoEvidencia(true);
+
+   
+        setMostrarConfirmar(false);
+
+        try {
+            const url = `${import.meta.env.VITE_BACKEND_URL}/subir-evidencia/${materiaSeleccionada}/${cursoSeleccionado}`;
+            const token = localStorage.getItem('token');
+            const formData = new FormData();
+            formData.append('imagen', imagen);
+            formData.append('tipo', tipo); 
+
+            await axios.post(url, formData, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            setMensajeEvidencia({ tipo: true, respuesta: 'Evidencia subida correctamente.' });
+            setImagen(null);
+            setPreview(null);
+            setEvidenciaSubida(true);
+            setTimeout(() => {
+                setMostrarModalEvidencia(false);
+                setMensajeEvidencia({});
+                registrarNotasDespuesDeEvidencia();
+            }, 1000);
+        } catch (error) {
+            setMensajeEvidencia({ tipo: false, respuesta: error.response?.data?.error || 'Error al subir la evidencia.' });
         }
+        setEnviandoEvidencia(false);
+    };
+
+    const registrarNotasDespuesDeEvidencia = async () => {
         setEnviando(true);
         try {
             const url = `${import.meta.env.VITE_BACKEND_URL}/registro-nota/${materiaSeleccionada}`;
             const token = localStorage.getItem('token');
-            
             const notasNumericas = {};
             Object.keys(notas).forEach(id => {
                 notasNumericas[id] = Number(notas[id]);
@@ -113,17 +167,44 @@ export const RegisterNotas = () => {
                 tipo,
                 notas: notasNumericas
             };
-            console.log('Enviando al backend:', { url, body });
             await axios.post(url, body, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             setMensaje({ tipo: true, respuesta: 'Notas registradas correctamente.' });
             setNotas({});
+            setEvidenciaSubida(false);
         } catch (error) {
             setMensaje({ tipo: false, respuesta: error.response?.data?.error || 'Error al registrar las notas.' });
         }
         setEnviando(false);
     };
+
+    const handleRegistrarNotas = async () => {
+        if (!tipo) {
+            setMensaje({ tipo: false, respuesta: 'Debe seleccionar el tipo de nota.' });
+            return;
+        }
+        const notasValidas = estudiantes.every(est => {
+            const nota = notas[est._id];
+            return nota !== undefined && nota !== '' && typeof nota === 'number' && nota >= 1 && nota <= 10;
+        });
+        if (!notasValidas) {
+            setMensaje({ tipo: false, respuesta: 'Debe ingresar todas las notas entre 1 y 10.' });
+            return;
+        }
+
+        if (!evidenciaSubida) {
+            setMostrarModalEvidencia(true);
+            setMensaje({ tipo: false, respuesta: 'Debe subir una imagen de evidencia antes de registrar las notas.' });
+            return;
+        }
+
+        await registrarNotasDespuesDeEvidencia();
+    };
+
+    useEffect(() => {
+        setEvidenciaSubida(false);
+    }, [cursoSeleccionado, materiaSeleccionada]);
 
     return (
         <div>
@@ -131,6 +212,82 @@ export const RegisterNotas = () => {
             <hr className='my-4' />
             <p className='mb-8 text-center'>Este módulo te permite registrar las notas de los estudiantes</p>
 
+            {mostrarModalEvidencia && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
+                    <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md relative">
+                        <button
+                            className="absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-2xl"
+                            onClick={() => setMostrarModalEvidencia(false)}
+                        >
+                            &times;
+                        </button>
+                        <h2 className="text-xl font-bold mb-4 text-center">Debe subir una imagen de evidencia antes de registrar las notas</h2>
+                        <form onSubmit={handleConfirmarSubida}>
+                            <div className="mb-4">
+                                <label className="block text-gray-700 font-bold mb-2">Imagen de evidencia:</label>
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleImagenChange}
+                                    className="border rounded w-full p-2"
+                                />
+                                {preview && (
+                                    <div className="flex flex-col items-center mt-2">
+                                        <img src={preview} alt="Vista previa" className="h-24 object-contain mb-2 border" />
+                                        <button
+                                            type="button"
+                                            className="text-red-600 underline text-sm"
+                                            onClick={quitarImagen}
+                                        >
+                                            Quitar imagen
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                            <button
+                                type="submit"
+                                className={`bg-blue-600 text-white px-6 py-2 rounded font-bold hover:bg-blue-800 transition-all w-full ${enviandoEvidencia || !imagen ? 'opacity-60 cursor-not-allowed' : ''}`}
+                                disabled={enviandoEvidencia || !imagen}
+                            >
+                                {enviandoEvidencia ? 'Subiendo...' : 'Subir Evidencia'}
+                            </button>
+                        </form>
+                        {Object.keys(mensajeEvidencia).length > 0 && (
+                            <Mensaje tipo={mensajeEvidencia.tipo}>{mensajeEvidencia.respuesta}</Mensaje>
+                        )}
+                    </div>
+                </div>
+            )}
+
+            {mostrarConfirmar && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
+                    <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-sm relative">
+                        <h2 className="text-lg font-bold mb-4 text-center">¿Está seguro que desea subir esta imagen como evidencia?</h2>
+                        {preview && (
+                            <div className="flex justify-center mb-4">
+                                <img src={preview} alt="Vista previa" className="h-32 object-contain border" />
+                            </div>
+                        )}
+                        <div className="flex justify-between gap-4">
+                            <button
+                                className="bg-gray-300 px-4 py-2 rounded font-bold hover:bg-gray-400 transition-all w-full"
+                                onClick={() => setMostrarConfirmar(false)}
+                            >
+                                Cancelar
+                            </button>
+                            <button
+                                className="bg-blue-600 text-white px-4 py-2 rounded font-bold hover:bg-blue-800 transition-all w-full"
+                                onClick={handleSubirEvidencia}
+                                disabled={enviandoEvidencia}
+                            >
+                                Confirmar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Tabla de registro de notas */}
             {Object.keys(mensaje).length > 0 && <Mensaje tipo={mensaje.tipo}>{mensaje.respuesta}</Mensaje>}
 
             <div className="flex justify-center mb-8">
@@ -206,11 +363,10 @@ export const RegisterNotas = () => {
                                     </td>
                                 </tr>
                             ))}
-                            
                             <tr>
                                 <td colSpan={4} className="py-4 text-center">
                                     <button
-                                        className={`bg-blue-600 text-white px-6 py-2 rounded font-bold hover:bg-blue-800 transition-all ${enviando ? 'opacity-60 cursor-not-allowed' : ''}`}
+                                        className={`bg-blue-600 text-white px-6 py-2 rounded font-bold hover:bg-blue-800 transition-all ${enviando || !tipo ? 'opacity-60 cursor-not-allowed' : ''}`}
                                         onClick={handleRegistrarNotas}
                                         disabled={enviando || !tipo}
                                     >
