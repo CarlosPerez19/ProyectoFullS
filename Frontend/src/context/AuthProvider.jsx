@@ -16,9 +16,7 @@ const AuthProvider = ({ children }) => {
                 }
             });
             setAuth(respuesta.data)
-            console.log(respuesta.data)
         } catch (error) {
-            console.log(error);
         }
     }
 
@@ -62,7 +60,6 @@ const actualizarPassword = async (datos) => {
             }
         }
         const respuesta = await axios.patch(url, datos, options)
-        console.log(respuesta)
         return { respuesta: respuesta.data.mensaje, tipo: true }
     } catch (error) {
         return { respuesta: error.response.data.error, tipo: false }

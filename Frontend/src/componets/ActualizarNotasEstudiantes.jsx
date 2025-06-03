@@ -29,7 +29,7 @@ export const ActualizarNotasEstudiantes = () => {
                 });
                 setCursos(respuesta.data.cursosAsociados || []); 
             } catch (error) {
-                console.error(error);
+                setMensaje({ respuesta: error.response?.data?.error || "Error al obtener los cursos", tipo: false });
             }
         };
         fetchCursos();

@@ -152,10 +152,6 @@ export const ActualizarNotas = () => {
             descripcion: tipoSeleccionado,
             notas: notas 
         };
-
-        console.log('URL:', url);
-        console.log('Body enviado:', body);
-
         await axios.patch(url, body, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
@@ -163,7 +159,6 @@ export const ActualizarNotas = () => {
         setNotas({});
     } catch (error) {
         setMensaje({ tipo: false, respuesta: error.response?.data?.error || 'Error al actualizar las notas.' });
-        console.error('Error al actualizar notas:', error);
     }
     setEnviando(false);
 };

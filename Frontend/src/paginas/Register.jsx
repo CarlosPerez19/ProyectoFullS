@@ -30,7 +30,6 @@ export const Register = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(form); 
         try {
           const url =  `${import.meta.env.VITE_BACKEND_URL}/registro`;
           const respuesta = await axios.post(url, form);

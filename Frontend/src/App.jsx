@@ -5,7 +5,6 @@ import Login from './paginas/Login'
 import { Register } from './paginas/Register'
 import { Forgot } from './paginas/Forgot'
 import Dashboard from './layout/Dashboard'
-import Crear from './paginas/Crear'
 import Perfil from './paginas/Perfil'
 import { Confirmar } from './paginas/Confirmar'
 import Restablecer from './paginas/Restablecer'
@@ -44,7 +43,6 @@ function App() {
               <Routes>
                 <Route element={<Dashboard />}>
                   <Route index element={<Perfil />} />
-                  <Route path='crear' element={<Crear />} />
                   <Route path='registrar' element={<Registrar />} />
                   <Route path='registrar-profesor' element={<Profesores />} />
                   <Route path='registrar-representante' element={<Representante />} />

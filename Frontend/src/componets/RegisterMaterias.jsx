@@ -27,7 +27,7 @@ export const RegisterMaterias = () => {
                 });
                 setCursos(respuesta.data) 
             } catch (error) {
-                console.error("Error al obtener los cursos:", error)
+                setMensaje({ respuesta: error.response?.data?.error || "Error al obtener los cursos", tipo: false });
             }
         }
         obtenerCursos()
