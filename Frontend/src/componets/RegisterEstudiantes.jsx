@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import axios from 'axios';
 import Mensaje from '../componets/Alertas/Mensajes'
 
-export const RegisterEstudiantes = () => {
+export const RegisterEstudiantes = ({ onRegistroExitoso }) => {
 
     const [form, setform] = useState({
         nombre: "",
@@ -15,7 +15,6 @@ export const RegisterEstudiantes = () => {
     const [cursos, setCursos] = useState([]);
     const [mensaje, setMensaje] = useState({})
 
-    
     useEffect(() => {
         const obtenerCursos = async () => {
             try {
@@ -44,7 +43,6 @@ export const RegisterEstudiantes = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            
             const payload = {
                 ...form,
                 curso: form.curso 
@@ -64,8 +62,9 @@ export const RegisterEstudiantes = () => {
                 cedulaRepresentante: "",
                 cedula: ""
             });
+            if (onRegistroExitoso) onRegistroExitoso(respuesta.data.estudiante || payload);
         } catch (error) {
-            setMensaje({ respuesta: error.response?.data?.error || "Error al registrar estudiante", tipo: false });
+            setMensaje({ respuesta: error.response?.data?.error || error.response?.data?.msg || "Error al registrar estudiante", tipo: false });
         }
     };
 

@@ -15,7 +15,6 @@ const RegistrarMateria = () => {
     const [mostrarConfirmar, setMostrarConfirmar] = useState(false);
     const [materiaEliminar, setMateriaEliminar] = useState(null);
 
-    
     useEffect(() => {
         const obtenerCursos = async () => {
             try {
@@ -34,27 +33,27 @@ const RegistrarMateria = () => {
         obtenerCursos();
     }, []);
 
-    
+    const fetchMaterias = async () => {
+        if (!cursoSeleccionado) {
+            setMaterias([]);
+            return;
+        }
+        try {
+            const url = `${import.meta.env.VITE_BACKEND_URL}/materias/${cursoSeleccionado}`;
+            const token = localStorage.getItem('token');
+            const { data } = await axios.get(url, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            setMaterias(data);
+        } catch (error) {
+            setMaterias([]);
+        }
+    };
+
     useEffect(() => {
-        const obtenerMaterias = async () => {
-            if (!cursoSeleccionado) {
-                setMaterias([]);
-                return;
-            }
-            try {
-                const url = `${import.meta.env.VITE_BACKEND_URL}/materias/${cursoSeleccionado}`;
-                const token = localStorage.getItem('token');
-                const { data } = await axios.get(url, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                setMaterias(data);
-            } catch (error) {
-                setMaterias([]);
-            }
-        };
-        obtenerMaterias();
+        fetchMaterias();
     }, [cursoSeleccionado]);
 
     const handleEditar = (materia) => {
@@ -62,13 +61,11 @@ const RegistrarMateria = () => {
         setMostrarEditar(true);
     };
 
-    
     const handleEliminar = (materia) => {
         setMateriaEliminar(materia);
         setMostrarConfirmar(true);
     };
 
-    
     const confirmarEliminar = async () => {
         if (!materiaEliminar || (!materiaEliminar._id && !materiaEliminar.id)) {
             setMostrarConfirmar(false);
@@ -84,22 +81,30 @@ const RegistrarMateria = () => {
                     'Authorization': `Bearer ${token}`
                 }
             });
-            setMaterias(materias.filter(mat => String(mat._id || mat.id) !== String(materiaId)));
+
+            await fetchMaterias();
             setMensaje({ respuesta: "Materia eliminada correctamente.", tipo: true });
         } catch (error) {
-            setMensaje({ 
-                respuesta: error.response?.data?.error || error.response?.data?.msg || "Error al eliminar la materia.", 
-                tipo: false 
+            setMensaje({
+                respuesta: error.response?.data?.error || error.response?.data?.msg || "Error al eliminar la materia.",
+                tipo: false
             });
         }
         setMostrarConfirmar(false);
         setMateriaEliminar(null);
     };
 
-    const closeModal = () => {
+    const handleRegistroExitoso = async () => {
+        setMostrarRegistro(false);
+        setMensaje({ tipo: true, respuesta: "Materia registrada correctamente." });
+        await fetchMaterias();
+    };
+
+    const closeModal = async () => {
         setMostrarRegistro(false);
         setMostrarEditar(false);
         setMateriaEditar(null);
+        await fetchMaterias();
     };
 
     const closeConfirmar = () => {
@@ -112,11 +117,9 @@ const RegistrarMateria = () => {
             <h1 className='font-black text-4xl text-gray-500 text-center'>Registrar Materias</h1>
             <hr className='my-4' />
             <p className='mb-8 text-center'>Este módulo te permite registrar una materia</p>
-            
-           
+
             {Object.keys(mensaje).length > 0 && <Mensaje tipo={mensaje.tipo}>{mensaje.respuesta}</Mensaje>}
 
-            
             <div className="flex justify-center mb-8">
                 <select
                     className="border-2 p-2 rounded-md"
@@ -138,11 +141,10 @@ const RegistrarMateria = () => {
                 </button>
             </div>
 
-            
             {mostrarRegistro && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
                     <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
-                        <RegisterMaterias />
+                        <RegisterMaterias onRegistroExitoso={handleRegistroExitoso} />
                         <button
                             className="mt-4 bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-600 w-full"
                             onClick={closeModal}
@@ -153,7 +155,6 @@ const RegistrarMateria = () => {
                 </div>
             )}
 
-            
             {mostrarEditar && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
                     <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
@@ -168,7 +169,6 @@ const RegistrarMateria = () => {
                 </div>
             )}
 
-            
             {mostrarConfirmar && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
                     <div className="bg-white p-6 rounded shadow-lg w-full max-w-sm text-center">

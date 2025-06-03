@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { RegisterProfesores } from '../../componets/RegisterProfesores'
 import { ActualizarProfesores } from '../../componets/ActualizarProfesores'
+import Mensaje from '../../componets/Alertas/Mensajes'
 
 const Profesores = () => {
     const [mostrarRegistro, setMostrarRegistro] = useState(false);
@@ -10,39 +11,41 @@ const Profesores = () => {
     const [profesores, setProfesores] = useState([]);
     const [mostrarConfirmar, setMostrarConfirmar] = useState(false);
     const [profesorEliminar, setProfesorEliminar] = useState(null);
+    const [mensaje, setMensaje] = useState({});
 
-    
+    const fetchProfesores = async () => {
+        try {
+            const url = `${import.meta.env.VITE_BACKEND_URL}/profesores`;
+            const token = localStorage.getItem('token');
+            const { data } = await axios.get(url, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            setProfesores(data);
+        } catch (error) {
+            setProfesores([]);
+            setMensaje({
+                tipo: false,
+                respuesta: error.response?.data?.msg || "Error al cargar los profesores."
+            });
+        }
+    };
+
     useEffect(() => {
-        const obtenerProfesores = async () => {
-            try {
-                const url = `${import.meta.env.VITE_BACKEND_URL}/profesores`;
-                const token = localStorage.getItem('token');
-                const { data } = await axios.get(url, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                setProfesores(data);
-            } catch (error) {
-                setProfesores([]);
-            }
-        };
-        obtenerProfesores();
+        fetchProfesores();
     }, []);
 
-    
     const handleEditar = (profesor) => {
         setProfesorEditar({ ...profesor, id: profesor._id || profesor.id });
         setMostrarEditar(true);
     };
 
-    
     const handleEliminar = (profesor) => {
         setProfesorEliminar(profesor);
         setMostrarConfirmar(true);
     };
 
-    
     const confirmarEliminar = async () => {
         if (!profesorEliminar || (!profesorEliminar._id && !profesorEliminar.id)) {
             setMostrarConfirmar(false);
@@ -58,21 +61,29 @@ const Profesores = () => {
                     'Authorization': `Bearer ${token}`
                 }
             });
-            setProfesores(prev =>
-                prev.filter(prof =>
-                    String(prof._id || prof.id) !== String(profesorId)
-                )
-            );
+            await fetchProfesores();
+            setMensaje({ tipo: true, respuesta: "Profesor eliminado correctamente." });
         } catch (error) {
+            setMensaje({
+                tipo: false,
+                respuesta: error.response?.data?.msg || error.response?.data?.error || "No se pudo eliminar el profesor."
+            });
         }
         setMostrarConfirmar(false);
         setProfesorEliminar(null);
     };
 
-    const closeModal = () => {
+    const handleRegistroExitoso = async () => {
+        setMostrarRegistro(false);
+        setMensaje({ tipo: true, respuesta: "Profesor registrado correctamente." });
+        await fetchProfesores();
+    };
+
+    const closeModal = async () => {
         setMostrarRegistro(false);
         setMostrarEditar(false);
         setProfesorEditar(null);
+        await fetchProfesores();
     };
 
     const closeConfirmar = () => {
@@ -85,6 +96,7 @@ const Profesores = () => {
             <h1 className='font-black text-4xl text-gray-500 text-center'>Registrar Profesores</h1>
             <hr className='my-4' />
             <p className='mb-8 text-center'>Este módulo te permite registrar un profesor</p>
+            {Object.keys(mensaje).length > 0 && <Mensaje tipo={mensaje.tipo}>{mensaje.respuesta}</Mensaje>}
             
             <div className="flex justify-center mb-8">
                 <button
@@ -95,11 +107,10 @@ const Profesores = () => {
                 </button>
             </div>
 
-            
             {mostrarRegistro && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
                     <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
-                        <RegisterProfesores />
+                        <RegisterProfesores onRegistroExitoso={handleRegistroExitoso} />
                         <button
                             className="mt-4 bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-600 w-full"
                             onClick={closeModal}
@@ -110,7 +121,6 @@ const Profesores = () => {
                 </div>
             )}
 
-            
             {mostrarEditar && profesorEditar && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
                     <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
@@ -129,7 +139,6 @@ const Profesores = () => {
                 </div>
             )}
 
-            
             {mostrarConfirmar && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
                     <div className="bg-white p-6 rounded shadow-lg w-full max-w-sm text-center">

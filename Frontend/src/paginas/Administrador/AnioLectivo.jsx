@@ -61,7 +61,6 @@ const AnioLectivo = () => {
                 <Mensaje tipo={mensaje.tipo}>{mensaje.respuesta}</Mensaje>
             )}
 
-            {/* Tarjeta con los botones uno al lado del otro */}
             {!mostrarFechaFin && !mostrarPonderaciones && (
                 <div className="flex justify-center mb-8">
                     <div className="bg-white shadow-lg rounded-lg p-6 flex gap-4 items-center">

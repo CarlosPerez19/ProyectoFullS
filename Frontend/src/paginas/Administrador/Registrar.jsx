@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { Register } from '../../componets/Register'
 import { ActualizarAdministrador } from '../../componets/ActualizarAdministrador'
+import Mensaje from '../../componets/Alertas/Mensajes'
 
 const Registrar = () => {
     const [mostrarRegistro, setMostrarRegistro] = useState(false);
@@ -10,47 +11,44 @@ const Registrar = () => {
     const [administradores, setAdministradores] = useState([]);
     const [mostrarConfirmar, setMostrarConfirmar] = useState(false); 
     const [adminEliminar, setAdminEliminar] = useState(null);
+    const [mensaje, setMensaje] = useState({});
 
-    
+    const fetchAdministradores = async () => {
+        try {
+            const url = `${import.meta.env.VITE_BACKEND_URL}/administradores`;
+            const token = localStorage.getItem('token');
+            const { data } = await axios.get(url, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            setAdministradores(data);
+        } catch (error) {
+            setAdministradores([]);
+        }
+    };
+
     useEffect(() => {
-        const obtenerAdministradores = async () => {
-            try {
-                const url = `${import.meta.env.VITE_BACKEND_URL}/administradores`;
-                const token = localStorage.getItem('token');
-                const { data } = await axios.get(url, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                setAdministradores(data);
-            } catch (error) {
-                setAdministradores([]);
-            }
-        };
-        obtenerAdministradores();
+        fetchAdministradores();
     }, []);
 
-    
     const handleEditar = (admin) => {
         setAdminEditar({ ...admin, id: admin._id || admin.id }); 
         setMostrarEditar(true);
     };
 
-    
     const handleEliminar = (admin) => {
         setAdminEliminar(admin);
         setMostrarConfirmar(true);
     };
 
-    
-     const confirmarEliminar = async () => {
+    const confirmarEliminar = async () => {
         if (!adminEliminar || (!adminEliminar._id && !adminEliminar.id)) {
             setMostrarConfirmar(false);
             setAdminEliminar(null);
             return;
         }
         try {
-            
             const adminId = adminEliminar._id ? adminEliminar._id : adminEliminar.id;
             const url = `${import.meta.env.VITE_BACKEND_URL}/eliminar-administrador/${adminId}`;
             const token = localStorage.getItem('token');
@@ -59,22 +57,26 @@ const Registrar = () => {
                     'Authorization': `Bearer ${token}`
                 }
             });
-            
-            setAdministradores(prev =>
-                prev.filter(admin =>
-                    String(admin._id || admin.id) !== String(adminId)
-                )
-            );
+            await fetchAdministradores();
+            setMensaje({ tipo: true, respuesta: "Administrador eliminado correctamente." });
         } catch (error) {
+            setMensaje({ tipo: false, respuesta: "Error al eliminar el administrador." });
         }
         setMostrarConfirmar(false);
         setAdminEliminar(null);
     };
 
-    const closeModal = () => {
+    const handleRegistroExitoso = async () => {
+        setMostrarRegistro(false);
+        setMensaje({ tipo: true, respuesta: "Administrador registrado correctamente." });
+        await fetchAdministradores();
+    };
+
+    const closeModal = async () => {
         setMostrarRegistro(false);
         setMostrarEditar(false);
         setAdminEditar(null);
+        await fetchAdministradores();
     };
 
     const closeConfirmar = () => {
@@ -88,6 +90,8 @@ const Registrar = () => {
             <hr className='my-4' />
             <p className='mb-8 text-center'>Este módulo te permite registrar un nuevo administrador</p>
             
+            {Object.keys(mensaje).length > 0 && <Mensaje tipo={mensaje.tipo}>{mensaje.respuesta}</Mensaje>}
+
             <div className="flex justify-center mb-8">
                 <button
                     className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-800"
@@ -97,11 +101,10 @@ const Registrar = () => {
                 </button>
             </div>
 
-            
             {mostrarRegistro && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
                     <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
-                        <Register />
+                        <Register onRegistroExitoso={handleRegistroExitoso} />
                         <button
                             className="mt-4 bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-600 w-full"
                             onClick={closeModal}
@@ -112,11 +115,9 @@ const Registrar = () => {
                 </div>
             )}
 
-            
             {mostrarEditar && adminEditar && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
                     <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
-                        
                         <ActualizarAdministrador admin={adminEditar} onClose={closeModal} />
                         <button
                             className="mt-4 bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-600 w-full"
@@ -128,7 +129,6 @@ const Registrar = () => {
                 </div>
             )}
 
-            
             {mostrarConfirmar && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
                     <div className="bg-white p-6 rounded shadow-lg w-full max-w-sm text-center">

@@ -12,23 +12,24 @@ const RegistrarCurso = () => {
     const [mostrarConfirmar, setMostrarConfirmar] = useState(false);
     const [cursoEliminar, setCursoEliminar] = useState(null);
 
-    
+    // Refresca la lista de cursos desde el backend
+    const fetchCursos = async () => {
+        try {
+            const url = `${import.meta.env.VITE_BACKEND_URL}/cursos`;
+            const token = localStorage.getItem('token');
+            const { data } = await axios.get(url, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            setCursos(data);
+        } catch (error) {
+            setCursos([]);
+        }
+    };
+
     useEffect(() => {
-        const obtenerCursos = async () => {
-            try {
-                const url = `${import.meta.env.VITE_BACKEND_URL}/cursos`;
-                const token = localStorage.getItem('token');
-                const { data } = await axios.get(url, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                setCursos(data);
-            } catch (error) {
-                setCursos([]);
-            }
-        };
-        obtenerCursos();
+        fetchCursos();
     }, []);
 
     const handleEditar = (curso) => {
@@ -36,13 +37,11 @@ const RegistrarCurso = () => {
         setMostrarEditar(true);
     };
 
-    
     const handleEliminar = (curso) => {
         setCursoEliminar(curso);
         setMostrarConfirmar(true);
     };
 
-    
     const confirmarEliminar = async () => {
         if (!cursoEliminar || (!cursoEliminar._id && !cursoEliminar.id)) {
             setMostrarConfirmar(false);
@@ -58,7 +57,8 @@ const RegistrarCurso = () => {
                     'Authorization': `Bearer ${token}`
                 }
             });
-            setCursos(cursos.filter(curso => String(curso._id || curso.id) !== String(cursoId)));
+            // Refresca la lista después de eliminar
+            await fetchCursos();
             setMensaje({ respuesta: "Curso eliminado correctamente.", tipo: true });
         } catch (error) {
             setMensaje({
@@ -70,10 +70,19 @@ const RegistrarCurso = () => {
         setCursoEliminar(null);
     };
 
-    const closeModal = () => {
+    // Refresca la tabla después de registrar
+    const handleRegistroExitoso = async () => {
+        setMostrarRegistro(false);
+        setMensaje({ tipo: true, respuesta: "Curso registrado correctamente." });
+        await fetchCursos();
+    };
+
+    const closeModal = async () => {
         setMostrarRegistro(false);
         setMostrarEditar(false);
         setCursoEditar(null);
+        // Si editas cursos, aquí puedes refrescar también
+        await fetchCursos();
     };
 
     const closeConfirmar = () => {
@@ -87,7 +96,6 @@ const RegistrarCurso = () => {
             <hr className='my-4' />
             <p className='mb-8 text-center'>Este módulo te permite registrar un curso</p>
 
-            
             {Object.keys(mensaje).length > 0 && <Mensaje tipo={mensaje.tipo}>{mensaje.respuesta}</Mensaje>}
 
             <div className="flex justify-center mb-8">
@@ -99,11 +107,10 @@ const RegistrarCurso = () => {
                 </button>
             </div>
 
-            
             {mostrarRegistro && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
                     <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
-                        <RegisterCursos />
+                        <RegisterCursos onRegistroExitoso={handleRegistroExitoso} />
                         <button
                             className="mt-4 bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-600 w-full"
                             onClick={closeModal}
@@ -114,7 +121,6 @@ const RegistrarCurso = () => {
                 </div>
             )}
 
-            
             {mostrarConfirmar && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
                     <div className="bg-white p-6 rounded shadow-lg w-full max-w-sm text-center">

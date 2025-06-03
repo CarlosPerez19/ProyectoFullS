@@ -39,26 +39,27 @@ const RegistrarEstudiante = () => {
         obtenerCursos()
     }, [])
 
-    useEffect(() => {
-        const obtenerEstudiantes = async () => {
-            if (!cursoSeleccionado) {
-                setEstudiantes([])
-                return
-            }
-            try {
-                const url = `${import.meta.env.VITE_BACKEND_URL}/cursos/${cursoSeleccionado}/estudiantes`
-                const token = localStorage.getItem('token')
-                const { data } = await axios.get(url, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                })
-                setEstudiantes(data)
-            } catch (error) {
-                setEstudiantes([])
-            }
+    const fetchEstudiantes = async () => {
+        if (!cursoSeleccionado) {
+            setEstudiantes([])
+            return
         }
-        obtenerEstudiantes()
+        try {
+            const url = `${import.meta.env.VITE_BACKEND_URL}/cursos/${cursoSeleccionado}/estudiantes`
+            const token = localStorage.getItem('token')
+            const { data } = await axios.get(url, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            setEstudiantes(data)
+        } catch (error) {
+            setEstudiantes([])
+        }
+    }
+
+    useEffect(() => {
+        fetchEstudiantes()
     }, [cursoSeleccionado])
 
     const handleEditar = (estudiante) => {
@@ -96,7 +97,7 @@ const RegistrarEstudiante = () => {
                     'Authorization': `Bearer ${token}`
                 }
             })
-            setEstudiantes(estudiantes.filter(est => String(est._id || est.id) !== String(estudianteId)))
+            await fetchEstudiantes()
             setMensaje({ respuesta: "Estudiante eliminado correctamente.", tipo: true })
         } catch (error) {
             setMensaje({
@@ -127,6 +128,12 @@ const RegistrarEstudiante = () => {
     const closeReasignarCurso = () => {
         setMostrarReasignarCurso(false)
         setEstudianteReasignar(null)
+    }
+
+    const handleRegistroExitoso = async () => {
+        setMostrarRegistro(false)
+        setMensaje({ tipo: true, respuesta: "Estudiante registrado correctamente." })
+        await fetchEstudiantes()
     }
 
     return (
@@ -161,7 +168,7 @@ const RegistrarEstudiante = () => {
             {mostrarRegistro && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
                     <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
-                        <RegisterEstudiantes />
+                        <RegisterEstudiantes onRegistroExitoso={handleRegistroExitoso} />
                         <button
                             className="mt-4 bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-600 w-full"
                             onClick={closeModal}
