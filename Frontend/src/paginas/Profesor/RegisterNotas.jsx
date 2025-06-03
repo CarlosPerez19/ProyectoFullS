@@ -1,4 +1,3 @@
-// ...existing imports...
 import { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import Mensaje from '../../componets/Alertas/Mensajes';
@@ -287,7 +286,6 @@ export const RegisterNotas = () => {
                 </div>
             )}
 
-            {/* Tabla de registro de notas */}
             {Object.keys(mensaje).length > 0 && <Mensaje tipo={mensaje.tipo}>{mensaje.respuesta}</Mensaje>}
 
             <div className="flex justify-center mb-8">
