@@ -119,7 +119,7 @@ const RegistrarCurso = () => {
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
                     <div className="bg-white p-6 rounded shadow-lg w-full max-w-sm text-center">
                         <h2 className="text-xl font-bold mb-4">¿Estás seguro de eliminar este curso?</h2>
-                        <p className="mb-4">{cursoEliminar?.nombre} {cursoEliminar?.paralelo}</p>
+                        <p className="mb-4">{cursoEliminar?.nombre}</p>
                         <div className="flex justify-center gap-4">
                             <button
                                 className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-800"
