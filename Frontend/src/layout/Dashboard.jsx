@@ -111,12 +111,12 @@ const Dashboard = () => {
                         >Materias</Link>
                     </li>
                     <li className="text-center">
-                        <Link to='/dashboard/año-lectivo'
+                        <Link to='/dashboard/anio-lectivo'
                             className={`text-xl block mt-2 rounded-md text-center px-3 py-2 transition-colors`}
                             style={{
-                                backgroundColor: urlActual === '/dashboard/año-lectivo' ? colores.sidebarActive : 'transparent',
-                                color: urlActual === '/dashboard/año-lectivo' ? colores.sidebarActiveText : colores.sidebarText,
-                                fontWeight: urlActual === '/dashboard/año-lectivo' ? 'bold' : 'normal'
+                                backgroundColor: urlActual === '/dashboard/anio-lectivo' ? colores.sidebarActive : 'transparent',
+                                color: urlActual === '/dashboard/anio-lectivo' ? colores.sidebarActiveText : colores.sidebarText,
+                                fontWeight: urlActual === '/dashboard/anio-lectivo' ? 'bold' : 'normal'
                             }}
                         >Año Lectivo</Link>
                     </li>

@@ -48,7 +48,7 @@ function App() {
                   <Route path='registrar-representante' element={<Representante />} />
                   <Route path='registrar-materia' element={<Materias />} />
                   <Route path='registrar-estudiante' element={<Estudiante />} />
-                  <Route path='año-lectivo' element={<AnioLectivo />} />
+                  <Route path='anio-lectivo' element={<AnioLectivo />} />
                   <Route path='justificar-inasistencia' element={<JustificarInasistencia />} />
                   <Route path='registrar-curso' element={<RegistrarCurso />} />
                 </Route>
