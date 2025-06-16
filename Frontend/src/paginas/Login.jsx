@@ -65,7 +65,12 @@ const Login = () => {
 
             if (respuesta.data.rol.includes('profesor')) {
                 navigate('/profesor-dashboard')
-            } else {
+            }else if (respuesta.data.rol.includes('representante')){
+                localStorage.removeItem('token')
+                navigate('/login')
+                toast.error('El rol de representante no está permitido para iniciar sesión, en este componente.')
+            } 
+            else {
                 navigate('/dashboard')
             }
         } catch (error) {
