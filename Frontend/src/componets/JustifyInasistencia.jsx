@@ -34,8 +34,6 @@ export const JustifyInasistencia = () => {
         try {
             const url = `${import.meta.env.VITE_BACKEND_URL}/justificar-inasistencia`;
             const token = localStorage.getItem('token');
-            console.log('Fecha enviada:', form.fecha);
-            console.log('Fecha formateada enviada al backend:', formattedForm.fecha);
 
             const respuesta = await axios.patch(url, formattedForm, {
                 headers: {
