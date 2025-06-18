@@ -20,10 +20,7 @@ export const JustifyInasistencia = () => {
     }
 
     const formatFecha = (fecha) => {
-        const date = new Date(fecha);
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
+        const [year, month, day] = fecha.split('-');
         return `${year}/${month}/${day}`;
     }
 
@@ -32,11 +29,14 @@ export const JustifyInasistencia = () => {
         const formattedForm = {
             ...form,
             fecha: formatFecha(form.fecha)
+            
         };
-
         try {
             const url = `${import.meta.env.VITE_BACKEND_URL}/justificar-inasistencia`;
             const token = localStorage.getItem('token');
+            console.log('Fecha enviada:', form.fecha);
+            console.log('Fecha formateada enviada al backend:', formattedForm.fecha);
+
             const respuesta = await axios.patch(url, formattedForm, {
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -44,9 +44,11 @@ export const JustifyInasistencia = () => {
             });
             setMensaje({ respuesta: respuesta.data.msg, tipo: true });
             setform({ cedula: "", justificacion: "", fecha: "" });
+            
         } catch (error) {
             setMensaje({ respuesta: error.response.data.error, tipo: false });
         }
+        
     };
 
     return (
