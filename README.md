@@ -32,7 +32,7 @@ Para instalar localmente el proyecto, se debe:
 
 3. Ejecutar el servidor:
 
- ```bash
-   npm run dev
+    ```bash
+      npm run dev
 
 4. En un navegador ingresar la ruta localhost
