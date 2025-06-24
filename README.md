@@ -29,7 +29,6 @@ Para instalar localmente el proyecto, se debe:
    ```bash
    npm install
 
-
 3. Ejecutar el servidor:
 
     ```bash
