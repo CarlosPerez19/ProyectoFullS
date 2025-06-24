@@ -7,7 +7,7 @@ En este proyecto se desarrolla un *frontend*, que permite, a través de consumo 
 
 ## Despliegue 
 
-Se puede acceder al despliegue en: [SisMDS](https://escuela-descubrir.onrender.com/)
+Se puede acceder al despliegue en: [Descubrir](https://escuela-descubrir.onrender.com/)
 
 
 ## Manual de Usuario 
