@@ -35,4 +35,4 @@ Para instalar localmente el proyecto, se debe:
  ```bash
    npm run dev
 
-4. Por último, en un navegador ejecutar la ruta de localhost 
+4. En un navegador ingresar la ruta localhost
