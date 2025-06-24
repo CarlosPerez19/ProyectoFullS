@@ -37,4 +37,16 @@ Para acceder al proyecto de deben seguir los siguientes pasos:
  ```bash
    npm run dev
 
+
+
+
+
+
+
+
+
+
+
+
+
 2. Acceder a un navegador web y ejecutar la ruta localhost
