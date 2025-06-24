@@ -28,3 +28,14 @@ Para instalar localmente el proyecto, se debe:
 
    ```bash
    npm install
+
+## Uso
+
+Para acceder al proyecto de deben seguir los siguientes pasos:
+1. Ejecutar el servidor:
+
+ ```bash
+   npm run dev
+
+2. Acceder desde un navegador web a la dirección:
+   localhost:3000
