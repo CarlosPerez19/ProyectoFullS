@@ -92,6 +92,21 @@ const Login = () => {
                     <div className="flex justify-center mb-6">
                         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR58EY_JijUgAGct2dUABbc0FRLLsEa9FaQDQ&s" alt="Logo" className="h-60 w-60 rounded-full object-cover" />
                     </div>
+
+                    <div className="flex justify-center mb-4">
+                        <a
+                            href="https://www.mediafire.com/file/zikjkrqj6tmsnpy/application-f7ffe4da-5a1d-43e7-8b4c-1e3b39b79d41.apk/file"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800"
+                            title="Descargar APK"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V4" />
+                            </svg>
+                            Descargar App Móvil
+                        </a>
+                    </div>
                     
                     <small className="text-gray-400 block my-4 text-sm">¡Bienvenido! Ingresa tus datos para iniciar</small>
 

@@ -214,12 +214,6 @@ export const RegisterNotas = () => {
             {mostrarModalEvidencia && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
                     <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md relative">
-                        <button
-                            className="absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-2xl"
-                            onClick={() => setMostrarModalEvidencia(false)}
-                        >
-                            &times;
-                        </button>
                         <h2 className="text-xl font-bold mb-4 text-center">Debe subir una imagen de evidencia antes de registrar las notas</h2>
                         <form onSubmit={handleConfirmarSubida}>
                             <div className="mb-4">
@@ -251,6 +245,12 @@ export const RegisterNotas = () => {
                                 {enviandoEvidencia ? 'Subiendo...' : 'Subir Evidencia'}
                             </button>
                         </form>
+                        <button
+                            className="mt-4 bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-600 w-full"
+                            onClick={() => setMostrarModalEvidencia(false)}
+                        >
+                            Cerrar
+                        </button>
                         {Object.keys(mensajeEvidencia).length > 0 && (
                             <Mensaje tipo={mensajeEvidencia.tipo}>{mensajeEvidencia.respuesta}</Mensaje>
                         )}

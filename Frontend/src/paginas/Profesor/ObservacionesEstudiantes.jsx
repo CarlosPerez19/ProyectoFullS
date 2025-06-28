@@ -111,16 +111,16 @@ const ObservacionesEstudiantes = () => {
             {estudianteSeleccionado && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
                     <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg relative">
-                        <button
-                            className="absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-2xl"
-                            onClick={() => setEstudianteSeleccionado(null)}
-                        >
-                            &times;
-                        </button>
                         <ObservacionEstudiante
                             estudiante={estudianteSeleccionado}
                             onClose={() => setEstudianteSeleccionado(null)}
                         />
+                        <button
+                            className="mt-4 bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-600 w-full"
+                            onClick={() => setEstudianteSeleccionado(false)}
+                        >
+                            Cerrar
+                        </button>
                     </div>
                 </div>
             )}

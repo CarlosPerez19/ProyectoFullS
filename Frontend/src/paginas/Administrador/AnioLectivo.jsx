@@ -56,7 +56,7 @@ const AnioLectivo = () => {
         <div>
             <h1 className='font-black text-4xl text-gray-500'>Año Lectivo</h1>
             <hr className='my-4' />
-            <p className='mb-8'>Este modulo permite gestionar los años lectivos</p>
+            <p className='mb-8'>Este módulo permite gestionar los años lectivos</p>
             {Object.keys(mensaje).length > 0 && (
                 <Mensaje tipo={mensaje.tipo}>{mensaje.respuesta}</Mensaje>
             )}
