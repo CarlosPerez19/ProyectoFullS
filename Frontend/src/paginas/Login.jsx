@@ -97,7 +97,7 @@ const Login = () => {
 
                     <div className="flex justify-center mb-4">
                         <a
-                            href="https://www.mediafire.com/file/zikjkrqj6tmsnpy/application-f7ffe4da-5a1d-43e7-8b4c-1e3b39b79d41.apk/file"
+                            href="https://www.mediafire.com/file/n9d0enilt4qr53g/descubrir-app.apk/file"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800"
