@@ -1,5 +1,6 @@
 import axios from "axios"
 import { createContext, useEffect, useState } from "react"
+import { isTokenValid } from "../utils/tokenUtils"
 
 const AuthContext = createContext()
 
@@ -8,8 +9,15 @@ const AuthProvider = ({ children }) => {
 
     const perfil = async() => {
         try {
+            const token = localStorage.getItem('token');
+            
+            if (!token || !isTokenValid(token)) {
+                localStorage.removeItem('token');
+                setAuth({});
+                return;
+            }
+
             const url = `${import.meta.env.VITE_BACKEND_URL}/perfil`;
-            const token = localStorage.getItem('token'); 
             const respuesta = await axios.get(url, {
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -17,14 +25,23 @@ const AuthProvider = ({ children }) => {
             });
             setAuth(respuesta.data)
         } catch (error) {
+            localStorage.removeItem('token');
+            setAuth({});
         }
+    }
+
+    const cerrarSesion = () => {
+        localStorage.removeItem('token');
+        setAuth({});
     }
 
     useEffect(() => {
         const token = localStorage.getItem('token')
-        if(token)
-        {
-            perfil(token)
+        if(token && isTokenValid(token)) {
+            perfil()
+        } else if (token) {
+            // Si el token existe pero no es válido, lo removemos
+            localStorage.removeItem('token');
         }
     }, [])
 
@@ -72,7 +89,8 @@ const actualizarPassword = async (datos) => {
                 auth,
                 setAuth,
                 actualizarPerfil,
-                actualizarPassword            
+                actualizarPassword,
+                cerrarSesion
             }
         }>
             {children}

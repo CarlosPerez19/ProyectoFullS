@@ -7,7 +7,7 @@ const Dashboard = () => {
     const urlActual = location.pathname
     const navigate = useNavigate();
 
-    const { auth } = useContext(AuthContext)
+    const { auth, cerrarSesion } = useContext(AuthContext)
     const autenticado = localStorage.getItem('token')
 
     const colores = {
@@ -153,7 +153,10 @@ const Dashboard = () => {
                     <div>
                         <Link to='/' className="text-white mr-3 text-md block text-center px-4 py-1 rounded-lg transition-colors"
                             style={{ backgroundColor: colores.salir }}
-                            onClick={() => { localStorage.removeItem('token') }}>
+                            onClick={() => { 
+                                cerrarSesion();
+                                navigate('/login');
+                            }}>
                             Salir
                         </Link>
                     </div>

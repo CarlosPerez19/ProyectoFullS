@@ -53,7 +53,7 @@ const Login = () => {
             const url = `${import.meta.env.VITE_BACKEND_URL}/login`
             const respuesta = await axios.post(url, form)
             localStorage.setItem('token', respuesta.data.token)
-            localStorage.setItem('rol', respuesta.data.rol)
+            // Removemos el almacenamiento del rol en localStorage por seguridad
 
             const perfilUrl = `${import.meta.env.VITE_BACKEND_URL}/perfil`
             const perfilRespuesta = await axios.get(perfilUrl, {
@@ -64,14 +64,16 @@ const Login = () => {
 
             setAuth(perfilRespuesta.data)
 
-            if (respuesta.data.rol.includes('profesor')) {
+            // Usamos el rol del perfil en lugar del localStorage
+            const userRole = perfilRespuesta.data.rol;
+
+            if (userRole.includes('profesor')) {
                 navigate('/profesor-dashboard')
-            }else if (respuesta.data.rol.includes('representante')){
+            } else if (userRole.includes('representante')) {
                 localStorage.removeItem('token')
                 navigate('/login')
                 toast.error('El rol de representante no está permitido para iniciar sesión, en este componente.')
-            } 
-            else {
+            } else {
                 navigate('/dashboard')
             }
         } catch (error) {
@@ -83,7 +85,7 @@ const Login = () => {
     return (
         <>
             <ToastContainer />
-            <div className="w-1/2 h-screen bg-[url('/public/images/descubrir.jpg')] 
+            <div className="w-1/2 h-screen bg-[url('/images/descubrir.jpg')] 
             bg-no-repeat bg-cover bg-center sm:block hidden">
             </div>
             {Object.keys(mensaje).length > 0 && <Mensaje tipo={mensaje.tipo}>{mensaje.respuesta}</Mensaje>}
